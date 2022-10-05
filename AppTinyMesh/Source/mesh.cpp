@@ -204,6 +204,43 @@ Mesh::Mesh(const Box& box)
 }
 
 /*!
+\brief Creates an axis aligned disc.
+\param disc the disc.
+\param nbDivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Disc& disc, const int nbDivision)
+{
+    const Vector a = disc.Vertex();
+    const double radius = disc.Radius();
+
+    // Orthonormal basis
+    const Vector z = Normalized(a);
+    Vector x, y;
+    z.Orthonormal(x, y);
+
+    // Vertices
+    const int vertexCount = nbDivision + 1; //Each division 1 vertex + 1 for the center
+    vertices.reserve(vertexCount);
+
+    // Circle slice size
+    const double theta = (2 * 3.141592) / nbDivision;
+
+    // Create Disc circle vertex
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
+        va *= radius;
+        vertices.push_back(va);
+    }
+
+    // Create circle triangles
+    vertices.push_back(a);
+    normals.push_back(-z);
+    for (int i = 0; i < nbDivision; i++)
+        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
+}
+
+/*!
 \brief Creates an axis aligned cone.
 \param cone the cone.
 \param nbDivision the number of divisions of the shape.
@@ -220,7 +257,7 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     z.Orthonormal(x, y);
 
     // Vertices
-    const int vertexCount = nbDivision + 2; //Each division neads 2 vertex + 2 for the circles centers
+    const int vertexCount = nbDivision + 2; //Each division 1 vertex + 2 for the cone tip and center
     vertices.reserve(vertexCount);
 
     // Circle slice size
@@ -239,7 +276,7 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     for (int i = 0; i < nbDivision; i++)
         AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
 
-    //Loop for the sides
+    //Loop for the sides triangle
     vertices.push_back(b);
     for (int i = 0; i < nbDivision; i++)
     {
