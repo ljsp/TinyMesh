@@ -44,6 +44,9 @@
     <ClCompile Include="Source\cylinder.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\cone.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Include\qte.h">
@@ -108,6 +111,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\cylinder.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\cone.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

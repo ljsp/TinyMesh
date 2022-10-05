@@ -204,6 +204,53 @@ Mesh::Mesh(const Box& box)
 }
 
 /*!
+\brief Creates an axis aligned cone.
+\param cone the cone.
+\param nbDivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Cone& cone, const int nbDivision)
+{
+    const Vector a = cone.Vertex(0);
+    const Vector b = cone.Vertex(1);
+    const double radius = cone.Radius();
+
+    // Orthonormal basis
+    const Vector z = Normalized(b - a);
+    Vector x, y;
+    z.Orthonormal(x, y);
+
+    // Vertices
+    const int vertexCount = nbDivision + 2; //Each division neads 2 vertex + 2 for the circles centers
+    vertices.reserve(vertexCount);
+
+    // Circle slice size
+    const double theta = (2 * 3.141592) / nbDivision;
+
+    // Top circle
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
+        va *= radius;
+        vertices.push_back(va);
+    }
+
+    vertices.push_back(a);
+    normals.push_back(-z);
+    for (int i = 0; i < nbDivision; i++)
+        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
+
+    //Loop for the sides
+    vertices.push_back(b);
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector normal = Normalized(vertices[i] - z);
+        normals.push_back(normal);
+        AddTriangle(vertices.size() - 1, i , ((i + 1) % nbDivision), normals.size() - 1);
+    }
+
+}
+
+/*!
 \brief Creates an axis aligned cylinder.
 \param cyl the cylinder.
 \param nbDivision the number of divisions of the shape.
@@ -213,8 +260,6 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     const Vector a = cyl.Vertex(0);
     const Vector b = cyl.Vertex(1);
     const double radius = cyl.Radius();
-    vertices.clear();
-    normals.clear();
 
     // Orthonormal basis
     const Vector z = Normalized(b - a);
