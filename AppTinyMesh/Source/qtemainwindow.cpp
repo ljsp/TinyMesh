@@ -82,7 +82,7 @@ void MainWindow::SphereImplicitExample()
 
 void MainWindow::DiscMeshExample()
 {
-	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1), 64);
+	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(discMesh.Vertexes());
@@ -95,7 +95,7 @@ void MainWindow::DiscMeshExample()
 
 void MainWindow::ConeMeshExample()
 {
-	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1), 64);
+	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(coneMesh.Vertexes());
@@ -108,7 +108,8 @@ void MainWindow::ConeMeshExample()
 
 void MainWindow::CylinderMeshExample()
 {
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 64);
+	//Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), Vector(0.0, 0.0, 1.0), 1.0), 64);
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), 2.0, 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(cylinderMesh.Vertexes());
