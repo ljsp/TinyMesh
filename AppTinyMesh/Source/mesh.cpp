@@ -156,6 +156,20 @@ Box Mesh::GetBox() const
   return Box(vertices);
 }
 
+ // Transformations
+
+void Mesh::Translate(const Vector& t)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] += t;
+	}
+}
+
+void Mesh::Rotate(Matrix3 rot) {
+	
+}
+
 /*!
 \brief Creates an axis aligned box.
 

@@ -4,6 +4,7 @@
 #include "ray.h"
 #include "mathematics.h"
 #include "cylinder.h"
+#include "matrix3.h"
 
 // Triangle
 class Triangle
@@ -118,6 +119,11 @@ public:
   void Scale(double);
 
   void SmoothNormals();
+
+  // Transformations
+  void Translate(const Vector&);
+  void Rotate(Matrix3 rot);
+  void Scale(Matrix3 scale);
 
   // Constructors from core classes
   explicit Mesh(const Box&);
