@@ -127,6 +127,7 @@ public:
   explicit Mesh(const Cone&, const int);
   explicit Mesh(const Cylinder&, const int);
 
+  void Merge(const Mesh&);
   void Load(const QString&);
   void SaveObj(const QString&, const QString&) const;
 protected:

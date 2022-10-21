@@ -377,6 +377,14 @@ void Mesh::Scale(double s)
 #include <QtCore/QRegularExpression>
 #include <QtCore/qstring.h>
 
+void Mesh::Merge(const Mesh& mesh)
+{
+	this->vertices.insert(this->vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
+	this->normals.insert(this->normals.end(), mesh.normals.begin(), mesh.normals.end());
+    this->varray.insert(this->varray.end(), mesh.varray.begin(), mesh.varray.end());
+	this->narray.insert(this->narray.end(), mesh.narray.begin(), mesh.narray.end());
+}
+
 /*!
 \brief Import a mesh from an .obj file.
 \param filename File name.

@@ -108,8 +108,10 @@ void MainWindow::ConeMeshExample()
 
 void MainWindow::CylinderMeshExample()
 {
-	//Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), Vector(0.0, 0.0, 1.0), 1.0), 64);
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), 2.0, 1.0), 64);
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(3.0, 0.0, 2.0), Vector(0.0, 0.0, 1.0), 1.0), 64);
+	
+	//Mesh cylinderMesh2 = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), 2.0, 1.0), 64);
+	//cylinderMesh.Merge(cylinderMesh2);
 
 	std::vector<Color> cols;
 	cols.resize(cylinderMesh.Vertexes());

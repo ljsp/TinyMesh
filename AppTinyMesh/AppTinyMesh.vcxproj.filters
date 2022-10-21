@@ -122,6 +122,9 @@
     <ClInclude Include="Include\disc.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\sphere.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\mesh.glsl">

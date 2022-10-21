@@ -171,6 +171,7 @@
     <ClInclude Include="Include\meshcolor.h" />
     <ClInclude Include="Include\ray.h" />
     <ClInclude Include="Include\shader-api.h" />
+    <ClInclude Include="Include\sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\mesh.glsl" />
