@@ -64,6 +64,12 @@ void MainWindow::BoxMeshExample()
 void MainWindow::CylinderMeshExample()
 {
 	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 64);
+	cylinderMesh.Rotate(90.0, 90.0, 0.0);
+	Matrix3 m;
+	Matrix3 s = m.Scale(0.5);
+	m.Identity();
+	Matrix3 r = m.Transpose();
+	cylinderMesh.Rotate(r);
 
 	std::vector<Color> cols;
 	cols.resize(cylinderMesh.Vertexes());

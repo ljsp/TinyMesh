@@ -122,8 +122,10 @@ public:
 
   // Transformations
   void Translate(const Vector&);
-  void Rotate(Matrix3 rot);
-  void Scale(Matrix3 scale);
+  void Rotate(const double, const double, const double); //Rotate around x,y,z axis
+  void Rotate(const Vector&, const double);				 //Rotate around an arbitrary axis
+  void Rotate(const Matrix3&);							 //Rotate according to a rotation matrix
+  void Scale(const Matrix3&);							 //Scale according to a scaling matrix
 
   // Constructors from core classes
   explicit Mesh(const Box&);

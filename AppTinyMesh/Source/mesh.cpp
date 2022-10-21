@@ -166,8 +166,78 @@ void Mesh::Translate(const Vector& t)
 	}
 }
 
-void Mesh::Rotate(Matrix3 rot) {
+/*!
+* \brief Rotate the mesh given the x,y and z rotation angles.
+* \param x, y, z Rotation angles in degrees.
+*/
+void Mesh::Rotate(const double x, const double y, const double z)
+{
+    Matrix3 m;
+	Matrix3 rx = m.RotateX(x);
+    Matrix3 ry = m.RotateY(y);
+    Matrix3 rz = m.RotateZ(z);
+    Matrix3 r = rx * ry * rz;
 	
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = r * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = r * normals[i];
+	}
+}
+
+/*!
+* \brief Rotate the mesh around a given vector and the angle.
+* \param v Vector to rotate around.
+* \param angle Angle to rotate.
+*/
+void Mesh::Rotate(const Vector& v, const double angle)
+{
+	Matrix3 m;
+	Matrix3 r = m.Rotate(v, angle);
+
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = r * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = r * normals[i];
+	}
+}
+
+/*!
+* \brief Scales the mesh given a scaling matrix.
+* \param m the scaling matrix.
+*/
+void Mesh::Rotate(const Matrix3& m)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = m * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = m * normals[i];
+	}
+}
+
+/*!
+* \brief Scale the mesh.
+* \param s Scale factor.
+*/
+void Mesh::Scale(const Matrix3& m) 
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = m * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = m * normals[i];
+	}
 }
 
 /*!
