@@ -36,6 +36,28 @@ Cylinder::Cylinder(const Vector& a, const Vector& b, const double r)
 }
 
 /*!
+\brief Create a cylinder given a vector, the height and a radius.
+
+Note that this constructor does not check the coordinates of the two vectors.
+Therefore, the coordinates of a should be lower than those of b.
+
+To create a cylinder of a vector and its height
+the general case, one should use:
+\code
+Cylinder cyl(Vector(0.0,0.0,0.0),2.0, 1);
+\endcode
+\param a bottom circle vertice.
+\param h cylinder height.
+\param r cylinder radius.
+*/
+Cylinder::Cylinder(const Vector& a, const double h, const double r)
+{
+    Cylinder::a = a;
+	Cylinder::b = a + Vector(h, 0.0, 0.0);
+    Cylinder::r = r;
+}
+
+/*!
 \brief Overloaded.
 \param s Stream.
 \param cyl The cylinder.

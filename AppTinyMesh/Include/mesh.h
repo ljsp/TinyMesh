@@ -4,6 +4,8 @@
 #include "ray.h"
 #include "mathematics.h"
 #include "cylinder.h"
+#include <cone.h>
+#include <disc.h>
 
 // Triangle
 class Triangle
@@ -121,8 +123,11 @@ public:
 
   // Constructors from core classes
   explicit Mesh(const Box&);
+  explicit Mesh(const Disc&, const int);
+  explicit Mesh(const Cone&, const int);
   explicit Mesh(const Cylinder&, const int);
 
+  void Merge(const Mesh&);
   void Load(const QString&);
   void SaveObj(const QString&, const QString&) const;
 protected:

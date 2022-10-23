@@ -1,5 +1,5 @@
 #pragma once
-// Cylinder
+// Cone
 
 #pragma once
 
@@ -8,27 +8,26 @@
 
 #include "mathematics.h"
 
-class Cylinder
+class Cone 
 {
 protected:
 	Vector a, b; //!< Lower and upper vertex.
-	double r; //!< Cylinder radius
+	double r; //!< Cone radius
 public:
 	//! Empty.
-	Cylinder() {}
-	explicit Cylinder(const Vector&, const Vector&, const double r);
-	explicit Cylinder(const Vector&, const double h, const double r);
+	Cone() {}
+	explicit Cone(const Vector&, const Vector&, const double r);
 
 	//! Empty.
-	~Cylinder() {}
+	~Cone() {}
 
 	// Access vertexes
 	Vector& operator[] (int);
 	Vector operator[] (int) const;
 
 	// Comparison
-	friend int operator==(const Cylinder&, const Cylinder&);
-	friend int operator!=(const Cylinder&, const Cylinder&);
+	friend int operator==(const Cone&, const Cone&);
+	friend int operator!=(const Cone&, const Cone&);
 
 	Vector Vertex(int) const;
 
@@ -38,61 +37,61 @@ public:
 	void Translate(const Vector&);
 	void Scale(double);
 
-	friend std::ostream& operator<<(std::ostream&, const Cylinder&);
+	friend std::ostream& operator<<(std::ostream&, const Cone&);
 
 public:
 	static const double epsilon; //!< Internal \htmlonly\epsilon;\endhtmlonly for ray intersection tests.
 };
 
-//! Returns either end vertex of the cylinder.
-inline Vector& Cylinder::operator[] (int i)
+//! Returns either end vertex of the cone.
+inline Vector& Cone::operator[] (int i)
 {
 	if (i == 0) return a;
 	else return b;
 }
 
 //! Overloaded.
-inline Vector Cylinder::operator[] (int i) const
+inline Vector Cone::operator[] (int i) const
 {
 	if (i == 0) return a;
 	else return b;
 }
 
 /*!
-\brief Returns the radius of the cylinder.
+\brief Returns the radius of the cone.
 */
-inline double Cylinder::Radius() const
+inline double Cone::Radius() const
 {
 	return r;
 }
 
 /*!
-\brief Returns the k-th vertex of the cylinder.
+\brief Returns the k-th vertex of the cone.
 
 The returned vector is computed by analysing the first three bits of k as follows:
 \code
 Vector vertex=Vector((k&1)?b[0]:a[0],(k&2)?b[1]:a[1],(k&4)?b[2]:a[2]);
 \endcode
 */
-inline Vector Cylinder::Vertex(int k) const
+inline Vector Cone::Vertex(int k) const
 {
 	return Vector((k & 1) ? b[0] : a[0], (k & 2) ? b[1] : a[1], (k & 4) ? b[2] : a[2]);
 }
 
 /*!
-\brief Check if two cylinders are (strictly) equal.
-\param a, b Cylinders.
+\brief Check if two cones are (strictly) equal.
+\param a, b Cones.
 */
-inline int operator==(const Cylinder& a, const Cylinder& b)
+inline int operator==(const Cone& a, const Cone& b)
 {
 	return (a.a == b.a) && (a.b == b.b);
 }
 
 /*!
-\brief Check if two cylinders are (strictly) different.
-\param a, b Cylinders.
+\brief Check if two cones are (strictly) different.
+\param a, b Cones.
 */
-inline int operator!=(const Cylinder& a, const Cylinder& b)
+inline int operator!=(const Cone& a, const Cone& b)
 {
 	return !(a == b);
 }
