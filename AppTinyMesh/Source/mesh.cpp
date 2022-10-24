@@ -348,6 +348,66 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     }
 }
 
+
+/*!
+\brief Creates a sphere.
+\param s the sphere.
+\param nSubdivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Sphere & S, int nSubdivision){
+    double r = S.Radius();
+    Vector c = S.Center();
+    double PI = 3.14159265358;
+
+    int horizontalStep = nSubdivision;
+    int verticalStep = nSubdivision;
+    double x, y, z;
+
+    // Ajout des 2 poles
+    vertices.emplace_back(Vector(c[0], c[1], c[2]+r));
+    normals.push_back(Normalized(vertices.back()));
+    vertices.emplace_back(Vector(c[0], c[1], c[2]-r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+    // h = 1 et h < horizontalStep - 1 car on a des ajouté les poles à la main avant
+    // pour eviter d'avoir v meme point
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep);
+            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep);
+            z = cos(PI * (double)h/(double)horizontalStep);
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles des poles
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle(0, 0, v+2, v+2, v+3, v+3);
+        AddSmoothTriangle(1, 1, Vertexes() - v - 1, Vertexes() - v - 1, Vertexes() -v - 2, Vertexes() -v - 2);
+    }
+
+    AddSmoothTriangle(2, 2, 0, 0, 2 + verticalStep - 1, 2 + verticalStep - 1);
+    AddSmoothTriangle(1, 1, Vertexes() - verticalStep, Vertexes() - verticalStep, Vertexes() - 1, Vertexes() - 1);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 2;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 2;
+            int v2 = (h+1)*verticalStep + v+ 2;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 2;
+
+            AddSmoothTriangle(v1, v1, v2, v2, v3, v3);
+            AddSmoothTriangle(v4, v4, v1, v1, v3, v3);
+        }
+    }
+}
+
 /*!
 \brief Scale the mesh.
 \param s Scaling factor.

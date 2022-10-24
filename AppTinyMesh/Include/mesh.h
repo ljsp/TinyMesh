@@ -4,8 +4,10 @@
 #include "ray.h"
 #include "mathematics.h"
 #include "cylinder.h"
+#include "sphere.h"
 #include <cone.h>
 #include <disc.h>
+
 
 // Triangle
 class Triangle
@@ -121,11 +123,15 @@ public:
 
   void SmoothNormals();
 
+  void TriangleSubdivision(int n);
+
   // Constructors from core classes
   explicit Mesh(const Box&);
   explicit Mesh(const Disc&, const int);
   explicit Mesh(const Cone&, const int);
   explicit Mesh(const Cylinder&, const int);
+  explicit Mesh(const Sphere&, int);
+
 
   void Merge(const Mesh&);
   void Load(const QString&);
