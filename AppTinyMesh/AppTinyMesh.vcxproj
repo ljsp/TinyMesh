@@ -104,7 +104,9 @@
   <ItemGroup>
     <ClCompile Include="Source\box.cpp" />
     <ClCompile Include="Source\camera.cpp" />
+    <ClCompile Include="Source\cone.cpp" />
     <ClCompile Include="Source\cylinder.cpp" />
+    <ClCompile Include="Source\disc.cpp" />
     <ClCompile Include="Source\evector.cpp" />
     <ClCompile Include="Source\implicits.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -160,13 +162,16 @@
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\camera.h" />
     <ClInclude Include="Include\color.h" />
+    <ClInclude Include="Include\cone.h" />
     <ClInclude Include="Include\cylinder.h" />
+    <ClInclude Include="Include\disc.h" />
     <ClInclude Include="Include\implicits.h" />
     <ClInclude Include="Include\mathematics.h" />
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\meshcolor.h" />
     <ClInclude Include="Include\ray.h" />
     <ClInclude Include="Include\shader-api.h" />
+    <ClInclude Include="Include\sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\mesh.glsl" />

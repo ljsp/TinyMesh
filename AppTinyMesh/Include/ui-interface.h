@@ -42,6 +42,8 @@ public:
     QHBoxLayout *hboxLayout;
     QGroupBox *Objects_groupBox;
     QPushButton *boxMesh;
+    QPushButton* discMesh;
+    QPushButton *coneMesh;
     QPushButton *cylinderMesh;
     QPushButton *resetcameraButton;
     QPushButton *sphereImplicit;
@@ -102,9 +104,17 @@ public:
         boxMesh->setObjectName(QString::fromUtf8("boxMesh"));
         boxMesh->setGeometry(QRect(20, 20, 101, 23));
         boxMesh->setCheckable(false);
+        discMesh = new QPushButton(Objects_groupBox);
+        discMesh->setObjectName(QString::fromUtf8("discMesh"));
+        discMesh->setGeometry(QRect(20, 80, 101, 23));
+        discMesh->setCheckable(false);
+        coneMesh = new QPushButton(Objects_groupBox);
+        coneMesh->setObjectName(QString::fromUtf8("coneMesh"));
+        coneMesh->setGeometry(QRect(20, 110, 101, 23));
+        coneMesh->setCheckable(false);
         cylinderMesh = new QPushButton(Objects_groupBox);
         cylinderMesh->setObjectName(QString::fromUtf8("cylinderMesh"));
-        cylinderMesh->setGeometry(QRect(20, 80, 101, 23));
+        cylinderMesh->setGeometry(QRect(20, 140, 101, 23));
         cylinderMesh->setCheckable(false);
         resetcameraButton = new QPushButton(Objects_groupBox);
         resetcameraButton->setObjectName(QString::fromUtf8("resetcameraButton"));
@@ -210,6 +220,24 @@ public:
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#aa00ff;\">Create Eurographics 1996 Bear</span></p></body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
         boxMesh->setText(QCoreApplication::translate("Assets", "Box Mesh", nullptr));
+#if QT_CONFIG(tooltip)
+        discMesh->setToolTip(QCoreApplication::translate("Assets", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#5500ff;\">Callback #01</span></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#aa00ff;\">Create Eurographics 1996 Bear</span></p></body></html>", nullptr));
+#endif // QT_CONFIG(tooltip)
+        discMesh->setText(QCoreApplication::translate("Assets", "Disc Mesh", nullptr));
+#if QT_CONFIG(tooltip)
+        coneMesh->setToolTip(QCoreApplication::translate("Assets", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#5500ff;\">Callback #01</span></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#aa00ff;\">Create Eurographics 1996 Bear</span></p></body></html>", nullptr));
+#endif // QT_CONFIG(tooltip)
+        coneMesh->setText(QCoreApplication::translate("Assets", "Cone Mesh", nullptr));
 #if QT_CONFIG(tooltip)
         cylinderMesh->setToolTip(QCoreApplication::translate("Assets", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
             "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
