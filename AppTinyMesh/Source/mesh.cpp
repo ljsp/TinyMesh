@@ -354,7 +354,7 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
 \param s the sphere.
 \param nSubdivision the number of divisions of the shape.
 */
-Mesh::Mesh(const Sphere & S, int nSubdivision){
+Mesh::Mesh(const Sphere & S, const int nSubdivision){
     double r = S.Radius();
     Vector c = S.Center();
     double PI = 3.14159265358;
@@ -375,9 +375,9 @@ Mesh::Mesh(const Sphere & S, int nSubdivision){
     for(int h = 1; h < horizontalStep; h++){
         for(int v = 0; v < verticalStep; v++){
 
-            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep);
-            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep);
-            z = cos(PI * (double)h/(double)horizontalStep);
+            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = cos(PI * (double)h/(double)horizontalStep)*r;
 
             vertices.emplace_back(Vector(x, y, z));
             normals.push_back(Normalized(vertices.back()));
@@ -406,6 +406,124 @@ Mesh::Mesh(const Sphere & S, int nSubdivision){
             AddSmoothTriangle(v4, v4, v1, v1, v3, v3);
         }
     }
+}
+
+
+
+/*!
+\brief Creates a pilule.
+\param p the sphere.
+\param nSubdivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Pilule& p, const int nSubdivision){
+    double r = p.Radius();
+    Vector a = p[0];
+    Vector b = p[1];
+    double PI = 3.14159265358;
+
+    int horizontalStep = nSubdivision/2;
+    int verticalStep = nSubdivision;
+    double x, y, z;
+
+
+
+    // Creation de la 1ère 1/2 sphere
+    vertices.emplace_back(Vector(a[0], a[1], a[2]-r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = a[0] + sin(PI/2. * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = a[1] + sin(PI/2. * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = a[2] - cos(PI/2. * (double)h/(double)horizontalStep)*r;
+
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles du pole
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle( v+1, v+1, 0, 0, v+2, v+2);
+    }
+
+    AddSmoothTriangle( 0, 0, 1, 1, verticalStep, verticalStep);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 1;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 1;
+            int v2 = (h+1)*verticalStep + v+ 1;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 1;
+
+            AddSmoothTriangle(v2,v2, v1, v1,v3, v3);
+            AddSmoothTriangle(v1, v1, v4, v4, v3, v3);
+        }
+    }
+
+    // Creation de la 2ème 1/2 sphere
+    int nbVertex = Vertexes();
+
+
+    vertices.emplace_back(Vector(b[0], b[1], b[2]+r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = b[0] + sin(PI/2. * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = b[1] + sin(PI/2. * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = b[2] + cos(PI/2. * (double)h/(double)horizontalStep)*r;
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles du poles
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle(nbVertex, nbVertex, nbVertex+ v+1, nbVertex+ v+1, nbVertex+ v+2, nbVertex+ v+2);
+    }
+
+    AddSmoothTriangle(nbVertex+ 1, nbVertex+ 1, nbVertex, nbVertex, nbVertex+ verticalStep, nbVertex+ verticalStep);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 1  + nbVertex;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 1 + nbVertex;
+            int v2 = (h+1)*verticalStep + v+ 1 + nbVertex;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 1 + nbVertex;
+
+            AddSmoothTriangle(v1, v1, v2, v2, v3, v3);
+            AddSmoothTriangle(v4, v4, v1, v1, v3, v3);
+        }
+    }
+
+
+    // Ajout des triangles reliant les deux 1/2 spheres
+
+    int vertexSphere1 = Vertexes()/2 - verticalStep;
+    int vertexSphere2 = Vertexes() - verticalStep;
+
+    for(int i=0; i<verticalStep - 1; i++){
+        AddSmoothTriangle(vertexSphere1 + i, vertexSphere1 + i, vertexSphere1 + i + 1, vertexSphere1 + i + 1, vertexSphere2 + i, vertexSphere2 + i);
+        AddSmoothTriangle( vertexSphere2 + i, vertexSphere2 + i, vertexSphere1 + i + 1, vertexSphere1 + i + 1,vertexSphere2 + i + 1, vertexSphere2 + i + 1);
+    }
+
+    AddSmoothTriangle(vertexSphere1 + verticalStep - 1, vertexSphere1 + verticalStep - 1, vertexSphere1, vertexSphere1, vertexSphere2, vertexSphere2);
+    AddSmoothTriangle(vertexSphere2, vertexSphere2, vertexSphere2 + verticalStep - 1, vertexSphere2 + verticalStep - 1, vertexSphere1 + verticalStep - 1, vertexSphere1 + verticalStep - 1);
+    //AddSmoothTriangle(vertexSphere1, vertexSphere1, vertexSphere2 + verticalStep - 1, vertexSphere2 + verticalStep - 1, vertexSphere2, vertexSphere2);
+
+
 }
 
 /*!
