@@ -9,6 +9,7 @@
 #include "pilule.h"
 #include "cone.h"
 #include "disc.h"
+#include <torus.h>
 
 // Triangle
 class Triangle
@@ -120,6 +121,8 @@ public:
 
   Box GetBox() const;
 
+
+
   void Scale(double);
 
   void SmoothNormals();
@@ -140,6 +143,7 @@ public:
   explicit Mesh(const Cylinder&, const int);
   explicit Mesh(const Sphere&, const int);
   explicit Mesh(const Pilule&, const int);
+  explicit Mesh(const Torus&, const int);
 
 
   void Merge(const Mesh&);

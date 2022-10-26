@@ -59,6 +59,9 @@
     <ClCompile Include="Source\matrix3.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\torus.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Include\qte.h">
@@ -138,6 +141,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\matrix3.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\torus.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

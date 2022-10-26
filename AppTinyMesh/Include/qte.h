@@ -27,6 +27,7 @@ public slots:
   void CylinderMeshExample();
   void SphereMeshExample();
   void CapsuleMeshExample();
+  void TorusMeshExample();
   void DiscMeshExample();
   void ConeMeshExample();
   void SphereImplicitExample();

@@ -611,6 +611,61 @@ Mesh::Mesh(const Pilule& p, const int nSubdivision){
 }
 
 /*!
+\brief Creates a torus.
+\param t the torus.
+\param res the number of divisions of the shape.
+*/
+Mesh::Mesh(const Torus& t, const int res)
+{
+	double PI = 3.14159265358;
+	double r = t.Radius();
+	double thickness = t.Thickness();
+	double x, y, z;
+	int horizontalStep = res;
+	int verticalStep = res;
+
+	for (int h = 0; h < horizontalStep; h++) {
+		for (int v = 0; v < verticalStep; v++) {
+
+			x = (r + thickness * cos(2 * PI * (double)h / (double)horizontalStep)) * cos(2 * PI * (double)v / (double)verticalStep);
+			y = (r + thickness * cos(2 * PI * (double)h / (double)horizontalStep)) * sin(2 * PI * (double)v / (double)verticalStep);
+			z = thickness * sin(2 * PI * (double)h / (double)horizontalStep);
+
+			vertices.emplace_back(Vector(x, y, z));
+			normals.push_back(Normalized(vertices.back()));
+		}
+	}
+
+	for (int h = 0; h < horizontalStep - 1; h++) {
+		for (int v = 0; v < verticalStep; v++) {
+			int v1 = h * verticalStep + v;
+			int v4 = h * verticalStep + (v + 1) % verticalStep;
+			int v2 = (h + 1) * verticalStep + v;
+			int v3 = (h + 1) * verticalStep + (v + 1) % verticalStep;
+
+            AddSmoothQuadrangle(v1, v1, v2, v2, v3, v3, v4, v4);
+		}
+	}
+
+	// Ajout de la derniere ligne de triangles
+	for (int v = 0; v < verticalStep - 1; v++) {
+		int v1 = (horizontalStep - 1) * verticalStep + v;
+		int v2 = (horizontalStep - 1) * verticalStep + v + 1;
+		int v3 = v;
+		int v4 = v + 1;
+		
+        AddSmoothQuadrangle(v4, v4, v2, v2, v1, v1, v3, v3);
+	}
+
+	// Ajout du dernier rectangle
+    AddSmoothQuadrangle(
+        0, 0,
+        (horizontalStep - 1) * verticalStep, (horizontalStep - 1) * verticalStep,
+        (horizontalStep - 1) * verticalStep + verticalStep - 1, (horizontalStep - 1) * verticalStep + verticalStep - 1,
+        verticalStep - 1, verticalStep - 1);	
+}
+
+/*!
 \brief Scale the mesh.
 \param s Scaling factor.
 */

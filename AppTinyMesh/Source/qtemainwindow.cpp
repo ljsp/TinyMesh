@@ -34,6 +34,7 @@ void MainWindow::CreateActions()
 	connect(uiw.cylinderMesh, SIGNAL(clicked()), this, SLOT(CylinderMeshExample()));
 	connect(uiw.sphereMesh, SIGNAL(clicked()), this, SLOT(SphereMeshExample()));
 	connect(uiw.capsuleMesh, SIGNAL(clicked()), this, SLOT(CapsuleMeshExample()));
+	connect(uiw.torusMesh, SIGNAL(clicked()), this, SLOT(TorusMeshExample()));
 	connect(uiw.resetcameraButton, SIGNAL(clicked()), this, SLOT(ResetCamera()));
 	connect(uiw.wireframe, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
 	connect(uiw.radioShadingButton_1, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
@@ -145,6 +146,19 @@ void MainWindow::CapsuleMeshExample()
 		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
 	meshColor = MeshColor(capsuleMesh, cols, capsuleMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::TorusMeshExample()
+{
+	Mesh torusMesh = Mesh(Torus(Vector(0.0, 0.0, 0.0), 1.0, 0.5), 64);
+
+	std::vector<Color> cols;
+	cols.resize(torusMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(torusMesh, cols, torusMesh.VertexIndexes());
 	UpdateGeometry();
 }
 
