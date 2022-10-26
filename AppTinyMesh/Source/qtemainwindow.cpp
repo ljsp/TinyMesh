@@ -33,6 +33,7 @@ void MainWindow::CreateActions()
 	connect(uiw.coneMesh, SIGNAL(clicked()), this, SLOT(ConeMeshExample()));
 	connect(uiw.cylinderMesh, SIGNAL(clicked()), this, SLOT(CylinderMeshExample()));
 	connect(uiw.sphereMesh, SIGNAL(clicked()), this, SLOT(SphereMeshExample()));
+	connect(uiw.capsuleMesh, SIGNAL(clicked()), this, SLOT(CapsuleMeshExample()));
 	connect(uiw.resetcameraButton, SIGNAL(clicked()), this, SLOT(ResetCamera()));
 	connect(uiw.wireframe, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
 	connect(uiw.radioShadingButton_1, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
@@ -130,6 +131,19 @@ void MainWindow::SphereMeshExample()
 		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
 	meshColor = MeshColor(sphereMesh, cols, sphereMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::CapsuleMeshExample()
+{
+	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 32);
+
+	std::vector<Color> cols;
+	cols.resize(capsuleMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(capsuleMesh, cols, capsuleMesh.VertexIndexes());
 	UpdateGeometry();
 }
 
