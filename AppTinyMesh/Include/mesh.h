@@ -4,11 +4,11 @@
 #include "ray.h"
 #include "mathematics.h"
 #include "cylinder.h"
+#include "matrix3.h"
 #include "sphere.h"
 #include "pilule.h"
 #include "cone.h"
 #include "disc.h"
-
 
 // Triangle
 class Triangle
@@ -124,6 +124,13 @@ public:
 
   void SmoothNormals();
 
+  // Transformations
+  void Translate(const Vector&);
+  void Rotate(const double, const double, const double); //Rotate around x,y,z axis
+  void Rotate(const Vector&, const double);				 //Rotate around an arbitrary axis
+  void Rotate(const Matrix3&);							 //Rotate according to a rotation matrix
+  void Scale(const Matrix3&);							 //Scale according to a scaling matrix
+  
   void TriangleSubdivision(int n);
 
   // Constructors from core classes

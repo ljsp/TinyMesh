@@ -156,6 +156,90 @@ Box Mesh::GetBox() const
   return Box(vertices);
 }
 
+ // Transformations
+
+void Mesh::Translate(const Vector& t)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] += t;
+	}
+}
+
+/*!
+* \brief Rotate the mesh given the x,y and z rotation angles.
+* \param x, y, z Rotation angles in degrees.
+*/
+void Mesh::Rotate(const double angleX, const double angleY, const double angleZ)
+{
+    Matrix3 r,x,y,z;
+	x.RotateX(angleX);
+    y.RotateY(angleY);
+	z.RotateZ(angleZ);
+	r = x * y * z;
+	
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = r * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = r * normals[i];
+	}
+}
+
+/*!
+* \brief Rotate the mesh around a given vector and the angle.
+* \param v Vector to rotate around.
+* \param angle Angle to rotate.
+*/
+void Mesh::Rotate(const Vector& v, const double angle)
+{
+	Matrix3 r;
+	r.Rotate(v, angle);
+
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = r * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = r * normals[i];
+	}
+}
+
+/*!
+* \brief Scales the mesh given a scaling matrix.
+* \param m the scaling matrix.
+*/
+void Mesh::Rotate(const Matrix3& r)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = r * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = r * normals[i];
+	}
+}
+
+/*!
+* \brief Scale the mesh.
+* \param s Scale factor.
+*/
+void Mesh::Scale(const Matrix3& s) 
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i] = s * vertices[i];
+	}
+	for (int i = 0; i < normals.size(); i++)
+	{
+		normals[i] = s * normals[i];
+	}
+}
+
 /*!
 \brief Creates an axis aligned box.
 

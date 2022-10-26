@@ -44,6 +44,7 @@
     <ClCompile Include="Source\cylinder.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\matrix3.cpp">
     <ClCompile Include="Source\cone.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
@@ -122,6 +123,7 @@
     <ClInclude Include="Include\cylinder.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\matrix3.h">
     <ClInclude Include="Include\cone.h">
       <Filter>Include</Filter>
     </ClInclude>
