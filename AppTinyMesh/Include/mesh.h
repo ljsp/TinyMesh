@@ -5,8 +5,9 @@
 #include "mathematics.h"
 #include "cylinder.h"
 #include "sphere.h"
-#include <cone.h>
-#include <disc.h>
+#include "pilule.h"
+#include "cone.h"
+#include "disc.h"
 
 
 // Triangle
@@ -130,7 +131,8 @@ public:
   explicit Mesh(const Disc&, const int);
   explicit Mesh(const Cone&, const int);
   explicit Mesh(const Cylinder&, const int);
-  explicit Mesh(const Sphere&, int);
+  explicit Mesh(const Sphere&, const int);
+  explicit Mesh(const Pilule&, const int);
 
 
   void Merge(const Mesh&);
