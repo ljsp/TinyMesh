@@ -1,4 +1,3 @@
-#pragma once
 // Cylinder
 
 #pragma once
@@ -17,6 +16,7 @@ public:
 	//! Empty.
 	Cylinder() {}
 	explicit Cylinder(const Vector&, const Vector&, const double r);
+	explicit Cylinder(const Vector&, const double h, const double r);
 
 	//! Empty.
 	~Cylinder() {}

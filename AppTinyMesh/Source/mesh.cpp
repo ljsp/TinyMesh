@@ -288,6 +288,90 @@ Mesh::Mesh(const Box& box)
 }
 
 /*!
+\brief Creates an axis aligned disc.
+\param disc the disc.
+\param nbDivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Disc& disc, const int nbDivision)
+{
+    const Vector a = disc.Vertex();
+    const double radius = disc.Radius();
+
+    // Orthonormal basis
+    const Vector z = Normalized(a);
+    Vector x, y;
+    z.Orthonormal(x, y);
+
+    // Vertices
+    const int vertexCount = nbDivision + 1; //Each division 1 vertex + 1 for the center
+    vertices.reserve(vertexCount);
+
+    // Circle slice size
+    const double theta = (2 * 3.141592) / nbDivision;
+
+    // Create Disc circle vertex
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
+        va *= radius;
+        vertices.push_back(va);
+    }
+
+    // Create circle triangles
+    vertices.push_back(a);
+    normals.push_back(-z);
+    for (int i = 0; i < nbDivision; i++)
+        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
+}
+
+/*!
+\brief Creates an axis aligned cone.
+\param cone the cone.
+\param nbDivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Cone& cone, const int nbDivision)
+{
+    const Vector a = cone.Vertex(0);
+    const Vector b = cone.Vertex(1);
+    const double radius = cone.Radius();
+
+    // Orthonormal basis
+    const Vector z = Normalized(b - a);
+    Vector x, y;
+    z.Orthonormal(x, y);
+
+    // Vertices
+    const int vertexCount = nbDivision + 2; //Each division 1 vertex + 2 for the cone tip and center
+    vertices.reserve(vertexCount);
+
+    // Circle slice size
+    const double theta = (2 * 3.141592) / nbDivision;
+
+    // Top circle
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
+        va *= radius;
+        vertices.push_back(va);
+    }
+
+    vertices.push_back(a);
+    normals.push_back(-z);
+    for (int i = 0; i < nbDivision; i++)
+        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
+
+    //Loop for the sides triangle
+    vertices.push_back(b);
+    for (int i = 0; i < nbDivision; i++)
+    {
+        Vector normal = Normalized(vertices[i] - z);
+        normals.push_back(normal);
+        AddTriangle(vertices.size() - 1, i , ((i + 1) % nbDivision), normals.size() - 1);
+    }
+
+}
+
+/*!
 \brief Creates an axis aligned cylinder.
 \param cyl the cylinder.
 \param nbDivision the number of divisions of the shape.
@@ -297,8 +381,6 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     const Vector a = cyl.Vertex(0);
     const Vector b = cyl.Vertex(1);
     const double radius = cyl.Radius();
-    vertices.clear();
-    normals.clear();
 
     // Orthonormal basis
     const Vector z = Normalized(b - a);
@@ -350,6 +432,184 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     }
 }
 
+
+/*!
+\brief Creates a sphere.
+\param s the sphere.
+\param nSubdivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Sphere & S, const int nSubdivision){
+    double r = S.Radius();
+    Vector c = S.Center();
+    double PI = 3.14159265358;
+
+    int horizontalStep = nSubdivision;
+    int verticalStep = nSubdivision;
+    double x, y, z;
+
+    // Ajout des 2 poles
+    vertices.emplace_back(Vector(c[0], c[1], c[2]+r));
+    normals.push_back(Normalized(vertices.back()));
+    vertices.emplace_back(Vector(c[0], c[1], c[2]-r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+    // h = 1 et h < horizontalStep - 1 car on a des ajouté les poles à la main avant
+    // pour eviter d'avoir v meme point
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = cos(PI * (double)h/(double)horizontalStep)*r;
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles des poles
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle(0, 0, v+2, v+2, v+3, v+3);
+        AddSmoothTriangle(1, 1, Vertexes() - v - 1, Vertexes() - v - 1, Vertexes() -v - 2, Vertexes() -v - 2);
+    }
+
+    AddSmoothTriangle(2, 2, 0, 0, 2 + verticalStep - 1, 2 + verticalStep - 1);
+    AddSmoothTriangle(1, 1, Vertexes() - verticalStep, Vertexes() - verticalStep, Vertexes() - 1, Vertexes() - 1);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 2;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 2;
+            int v2 = (h+1)*verticalStep + v+ 2;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 2;
+
+            AddSmoothTriangle(v1, v1, v2, v2, v3, v3);
+            AddSmoothTriangle(v4, v4, v1, v1, v3, v3);
+        }
+    }
+}
+
+
+
+/*!
+\brief Creates a pilule.
+\param p the sphere.
+\param nSubdivision the number of divisions of the shape.
+*/
+Mesh::Mesh(const Pilule& p, const int nSubdivision){
+    double r = p.Radius();
+    Vector a = p[0];
+    Vector b = p[1];
+    double PI = 3.14159265358;
+
+    int horizontalStep = nSubdivision/2;
+    int verticalStep = nSubdivision;
+    double x, y, z;
+
+
+
+    // Creation de la 1ère 1/2 sphere
+    vertices.emplace_back(Vector(a[0], a[1], a[2]-r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = a[0] + sin(PI/2. * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = a[1] + sin(PI/2. * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = a[2] - cos(PI/2. * (double)h/(double)horizontalStep)*r;
+
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles du pole
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle( v+1, v+1, 0, 0, v+2, v+2);
+    }
+
+    AddSmoothTriangle( 0, 0, 1, 1, verticalStep, verticalStep);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 1;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 1;
+            int v2 = (h+1)*verticalStep + v+ 1;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 1;
+
+            AddSmoothTriangle(v2,v2, v1, v1,v3, v3);
+            AddSmoothTriangle(v1, v1, v4, v4, v3, v3);
+        }
+    }
+
+    // Creation de la 2ème 1/2 sphere
+    int nbVertex = Vertexes();
+
+
+    vertices.emplace_back(Vector(b[0], b[1], b[2]+r));
+    normals.push_back(Normalized(vertices.back()));
+
+
+    for(int h = 1; h < horizontalStep; h++){
+        for(int v = 0; v < verticalStep; v++){
+
+            x = b[0] + sin(PI/2. * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
+            y = b[1] + sin(PI/2. * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
+            z = b[2] + cos(PI/2. * (double)h/(double)horizontalStep)*r;
+
+            vertices.emplace_back(Vector(x, y, z));
+            normals.push_back(Normalized(vertices.back()));
+        }
+    }
+
+    // Triangles du poles
+    for(int v = 0; v < verticalStep - 1; v++){
+        AddSmoothTriangle(nbVertex, nbVertex, nbVertex+ v+1, nbVertex+ v+1, nbVertex+ v+2, nbVertex+ v+2);
+    }
+
+    AddSmoothTriangle(nbVertex+ 1, nbVertex+ 1, nbVertex, nbVertex, nbVertex+ verticalStep, nbVertex+ verticalStep);
+
+
+
+    for(int h = 0; h < horizontalStep - 2; h++){
+        for(int v = 0; v < verticalStep; v++){
+            int v1 = h*verticalStep + v + 1  + nbVertex;
+            int v4 = h*verticalStep + (v+1)%verticalStep + 1 + nbVertex;
+            int v2 = (h+1)*verticalStep + v+ 1 + nbVertex;
+            int v3 = (h+1)*verticalStep + (v+1)%verticalStep + 1 + nbVertex;
+
+            AddSmoothTriangle(v1, v1, v2, v2, v3, v3);
+            AddSmoothTriangle(v4, v4, v1, v1, v3, v3);
+        }
+    }
+
+
+    // Ajout des triangles reliant les deux 1/2 spheres
+
+    int vertexSphere1 = Vertexes()/2 - verticalStep;
+    int vertexSphere2 = Vertexes() - verticalStep;
+
+    for(int i=0; i<verticalStep - 1; i++){
+        AddSmoothTriangle(vertexSphere1 + i, vertexSphere1 + i, vertexSphere1 + i + 1, vertexSphere1 + i + 1, vertexSphere2 + i, vertexSphere2 + i);
+        AddSmoothTriangle( vertexSphere2 + i, vertexSphere2 + i, vertexSphere1 + i + 1, vertexSphere1 + i + 1,vertexSphere2 + i + 1, vertexSphere2 + i + 1);
+    }
+
+    AddSmoothTriangle(vertexSphere1 + verticalStep - 1, vertexSphere1 + verticalStep - 1, vertexSphere1, vertexSphere1, vertexSphere2, vertexSphere2);
+    AddSmoothTriangle(vertexSphere2, vertexSphere2, vertexSphere2 + verticalStep - 1, vertexSphere2 + verticalStep - 1, vertexSphere1 + verticalStep - 1, vertexSphere1 + verticalStep - 1);
+    //AddSmoothTriangle(vertexSphere1, vertexSphere1, vertexSphere2 + verticalStep - 1, vertexSphere2 + verticalStep - 1, vertexSphere2, vertexSphere2);
+
+
+}
+
 /*!
 \brief Scale the mesh.
 \param s Scaling factor.
@@ -378,6 +638,14 @@ void Mesh::Scale(double s)
 #include <QtCore/QTextStream>
 #include <QtCore/QRegularExpression>
 #include <QtCore/qstring.h>
+
+void Mesh::Merge(const Mesh& mesh)
+{
+	this->vertices.insert(this->vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
+	this->normals.insert(this->normals.end(), mesh.normals.begin(), mesh.normals.end());
+    this->varray.insert(this->varray.end(), mesh.varray.begin(), mesh.varray.end());
+	this->narray.insert(this->narray.end(), mesh.narray.begin(), mesh.narray.end());
+}
 
 /*!
 \brief Import a mesh from an .obj file.

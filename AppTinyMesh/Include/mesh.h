@@ -5,6 +5,10 @@
 #include "mathematics.h"
 #include "cylinder.h"
 #include "matrix3.h"
+#include "sphere.h"
+#include "pilule.h"
+#include "cone.h"
+#include "disc.h"
 
 // Triangle
 class Triangle
@@ -126,11 +130,19 @@ public:
   void Rotate(const Vector&, const double);				 //Rotate around an arbitrary axis
   void Rotate(const Matrix3&);							 //Rotate according to a rotation matrix
   void Scale(const Matrix3&);							 //Scale according to a scaling matrix
+  
+  void TriangleSubdivision(int n);
 
   // Constructors from core classes
   explicit Mesh(const Box&);
+  explicit Mesh(const Disc&, const int);
+  explicit Mesh(const Cone&, const int);
   explicit Mesh(const Cylinder&, const int);
+  explicit Mesh(const Sphere&, const int);
+  explicit Mesh(const Pilule&, const int);
 
+
+  void Merge(const Mesh&);
   void Load(const QString&);
   void SaveObj(const QString&, const QString&) const;
 protected:

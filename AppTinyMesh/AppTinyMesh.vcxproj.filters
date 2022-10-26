@@ -45,6 +45,16 @@
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\matrix3.cpp">
+    <ClCompile Include="Source\cone.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\disc.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\pilule.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\sphere.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +124,16 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\matrix3.h">
+    <ClInclude Include="Include\cone.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\disc.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\sphere.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\pilule.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

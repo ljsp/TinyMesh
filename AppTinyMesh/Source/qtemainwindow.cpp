@@ -29,7 +29,11 @@ void MainWindow::CreateActions()
 	// Buttons
 	connect(uiw.boxMesh, SIGNAL(clicked()), this, SLOT(BoxMeshExample()));
 	connect(uiw.sphereImplicit, SIGNAL(clicked()), this, SLOT(SphereImplicitExample()));
+	connect(uiw.discMesh, SIGNAL(clicked()), this, SLOT(DiscMeshExample()));
+	connect(uiw.coneMesh, SIGNAL(clicked()), this, SLOT(ConeMeshExample()));
 	connect(uiw.cylinderMesh, SIGNAL(clicked()), this, SLOT(CylinderMeshExample()));
+	connect(uiw.sphereMesh, SIGNAL(clicked()), this, SLOT(SphereMeshExample()));
+	connect(uiw.capsuleMesh, SIGNAL(clicked()), this, SLOT(CapsuleMeshExample()));
 	connect(uiw.resetcameraButton, SIGNAL(clicked()), this, SLOT(ResetCamera()));
 	connect(uiw.wireframe, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
 	connect(uiw.radioShadingButton_1, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
@@ -61,22 +65,6 @@ void MainWindow::BoxMeshExample()
 	UpdateGeometry();
 }
 
-void MainWindow::CylinderMeshExample()
-{
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 64);
-	
-	cylinderMesh.Rotate(60.0, 0.0, 100.0);
-
-	
-	std::vector<Color> cols;
-	cols.resize(cylinderMesh.Vertexes());
-	for (int i = 0; i < cols.size(); i++)
-		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
-
-	meshColor = MeshColor(cylinderMesh, cols, cylinderMesh.VertexIndexes());
-	UpdateGeometry();
-}
-
 void MainWindow::SphereImplicitExample()
 {
   AnalyticScalarField implicit;
@@ -92,6 +80,72 @@ void MainWindow::SphereImplicitExample()
   meshColor = MeshColor(implicitMesh, cols, implicitMesh.VertexIndexes());
   UpdateGeometry();
 
+}
+
+void MainWindow::DiscMeshExample()
+{
+	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 64);
+
+	std::vector<Color> cols;
+	cols.resize(discMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(discMesh, cols, discMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::ConeMeshExample()
+{
+	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1.0), 64);
+
+	std::vector<Color> cols;
+	cols.resize(coneMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(coneMesh, cols, coneMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::CylinderMeshExample()
+{
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 64);
+	cylinderMesh.Rotate(60.0, 0.0, 100.0);
+	
+	std::vector<Color> cols;
+	cols.resize(cylinderMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(cylinderMesh, cols, cylinderMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::SphereMeshExample()
+{
+	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 64);
+
+	std::vector<Color> cols;
+	cols.resize(sphereMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(sphereMesh, cols, sphereMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::CapsuleMeshExample()
+{
+	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 32);
+
+	std::vector<Color> cols;
+	cols.resize(capsuleMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(capsuleMesh, cols, capsuleMesh.VertexIndexes());
+	UpdateGeometry();
 }
 
 void MainWindow::UpdateGeometry()
