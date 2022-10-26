@@ -44,7 +44,6 @@
     <ClCompile Include="Source\cylinder.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\matrix3.cpp">
     <ClCompile Include="Source\cone.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
@@ -55,6 +54,9 @@
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\sphere.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\matrix3.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,7 +125,6 @@
     <ClInclude Include="Include\cylinder.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\matrix3.h">
     <ClInclude Include="Include\cone.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -134,6 +135,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\pilule.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\matrix3.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
