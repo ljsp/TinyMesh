@@ -32,6 +32,7 @@ void MainWindow::CreateActions()
 	connect(uiw.discMesh, SIGNAL(clicked()), this, SLOT(DiscMeshExample()));
 	connect(uiw.coneMesh, SIGNAL(clicked()), this, SLOT(ConeMeshExample()));
 	connect(uiw.cylinderMesh, SIGNAL(clicked()), this, SLOT(CylinderMeshExample()));
+	connect(uiw.sphereMesh, SIGNAL(clicked()), this, SLOT(SphereMeshExample()));
 	connect(uiw.resetcameraButton, SIGNAL(clicked()), this, SLOT(ResetCamera()));
 	connect(uiw.wireframe, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
 	connect(uiw.radioShadingButton_1, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
@@ -108,10 +109,7 @@ void MainWindow::ConeMeshExample()
 
 void MainWindow::CylinderMeshExample()
 {
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(3.0, 0.0, 2.0), Vector(0.0, 0.0, 1.0), 1.0), 64);
-	
-	//Mesh cylinderMesh2 = Mesh(Cylinder(Vector(-1.0, 0.0, -1.0), 2.0, 1.0), 64);
-	//cylinderMesh.Merge(cylinderMesh2);
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 0.0, 0.0), 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(cylinderMesh.Vertexes());
@@ -119,6 +117,19 @@ void MainWindow::CylinderMeshExample()
 		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
 	meshColor = MeshColor(cylinderMesh, cols, cylinderMesh.VertexIndexes());
+	UpdateGeometry();
+}
+
+void MainWindow::SphereMeshExample()
+{
+	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 64);
+
+	std::vector<Color> cols;
+	cols.resize(sphereMesh.Vertexes());
+	for (int i = 0; i < cols.size(); i++)
+		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
+
+	meshColor = MeshColor(sphereMesh, cols, sphereMesh.VertexIndexes());
 	UpdateGeometry();
 }
 
