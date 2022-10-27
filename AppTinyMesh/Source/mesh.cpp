@@ -287,6 +287,58 @@ Mesh::Mesh(const Box& box)
   AddTriangle(6, 7, 2, 3);
 }
 
+Mesh::Mesh(const Terrain& t, const int res)
+{
+	Vector localUp = t.getLocalUp();
+    Vector axisA = t.getAxisA();
+	Vector axisB = t.getAxisB();
+	
+	// Vertices 
+	vertices.resize(res * res);
+	varray.resize((res - 1) * (res - 1) * 6);
+	narray.resize((res - 1) * (res - 1) * 6);
+
+	// Normals
+	normals.push_back(localUp);
+	
+    int triIndex = 0;
+	
+    for (int y = 0; y < res; y++)
+    {
+        for (int x = 0; x < res; x++)
+        {
+			const int i = x + y * res;
+			const double u = (double)x / (double)(res - 1);
+			const double v = (double)y / (double)(res - 1);
+			const Vector pointOnUnitCube = localUp + (axisA * u * 2) + (axisB * v * 2);
+			const Vector pointOnUnitSphere = Normalized(pointOnUnitCube);
+            vertices[i] = pointOnUnitCube;
+
+            if (x < res - 1 && y < res - 1)
+            {
+				varray[triIndex] = i;
+				varray[triIndex + 1] = i + res + 1;
+				varray[triIndex + 2] = i + res;
+
+				varray[triIndex + 3] = i;
+				varray[triIndex + 4] = i + 1;
+				varray[triIndex + 5] = i + res + 1;
+
+				narray[triIndex] = 0;
+				narray[triIndex + 1] = 0;
+				narray[triIndex + 2] = 0;
+
+				narray[triIndex + 3] = 0;
+				narray[triIndex + 4] = 0;
+				narray[triIndex + 5] = 0;
+
+				triIndex += 6;
+            }
+        }
+    }
+}
+
+
 /*!
 \brief Creates an axis aligned disc.
 \param disc the disc.

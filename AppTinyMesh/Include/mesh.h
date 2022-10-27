@@ -10,6 +10,7 @@
 #include "cone.h"
 #include "disc.h"
 #include <torus.h>
+#include <terrain.h>
 
 // Triangle
 class Triangle
@@ -137,6 +138,7 @@ public:
   void TriangleSubdivision(int n);
 
   // Constructors from core classes
+  explicit Mesh(const Terrain&, const int);
   explicit Mesh(const Box&);
   explicit Mesh(const Disc&, const int);
   explicit Mesh(const Cone&, const int);
