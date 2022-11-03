@@ -9,6 +9,8 @@
 #include "pilule.h"
 #include "cone.h"
 #include "disc.h"
+#include "torus.h"
+#include "terrain.h"
 #include <torus.h>
 #include <face.h>
 #include <planet.h>
@@ -151,6 +153,7 @@ public:
   explicit Mesh(const Sphere&, const int);
   explicit Mesh(const Pilule&, const int);
   explicit Mesh(const Torus&, const int);
+  explicit Mesh(const Terrain&);
 
 
   void Merge(const Mesh&);
