@@ -295,11 +295,9 @@ Mesh::Mesh(const Terrain& t, const int res)
 	
 	// Vertices 
 	vertices.resize(res * res);
+    normals.resize(res * res);
 	varray.resize((res - 1) * (res - 1) * 6);
 	narray.resize((res - 1) * (res - 1) * 6);
-
-	// Normals
-	normals.push_back(localUp);
 	
     int triIndex = 0;
 	
@@ -310,11 +308,20 @@ Mesh::Mesh(const Terrain& t, const int res)
 			const int i = x + y * res;
 			const double u = (double)x / (double)(res - 1);
 			const double v = (double)y / (double)(res - 1);
-			const Vector pointOnUnitCube = localUp + (axisA * u * 2) + (axisB * v * 2);
-			const Vector pointOnUnitSphere = Normalized(pointOnUnitCube);
-            vertices[i] = pointOnUnitCube;
+			const Vector pointOnUnitCube = localUp + axisA * (u - 0.5f) * 2 + axisB * (v - 0.5f) * 2;
+            const double x2 = pointOnUnitCube[0] * pointOnUnitCube[0];
+            const double y2 = pointOnUnitCube[1] * pointOnUnitCube[1];
+            const double z2 = pointOnUnitCube[2] * pointOnUnitCube[2];
+            const double px = pointOnUnitCube[0] * sqrt(1 - (y2 + z2) / 2 + (y2 * z2) / 3);
+            const double py = pointOnUnitCube[1] * sqrt(1 - (z2 + x2) / 2 + (z2 * x2) / 3);
+            const double pz = pointOnUnitCube[2] * sqrt(1 - (x2 + y2) / 2 + (x2 * y2) / 3);
+            const Vector pointOnUnitSphere(px,py,pz);
+            vertices[i] = pointOnUnitSphere;
+			
+            normals[i] = pointOnUnitSphere;
+			
 
-            if (x < res - 1 && y < res - 1)
+            if (x < res - 1 && y < res - 1) 
             {
 				varray[triIndex] = i;
 				varray[triIndex + 1] = i + res + 1;
@@ -324,13 +331,13 @@ Mesh::Mesh(const Terrain& t, const int res)
 				varray[triIndex + 4] = i + 1;
 				varray[triIndex + 5] = i + res + 1;
 
-				narray[triIndex] = 0;
-				narray[triIndex + 1] = 0;
-				narray[triIndex + 2] = 0;
+				narray[triIndex] = i;
+				narray[triIndex + 1] = i + res + 1;
+				narray[triIndex + 2] = i + res;
 
-				narray[triIndex + 3] = 0;
-				narray[triIndex + 4] = 0;
-				narray[triIndex + 5] = 0;
+				narray[triIndex + 3] = i;
+				narray[triIndex + 4] = i + 1;
+				narray[triIndex + 5] = i + res + 1;
 
 				triIndex += 6;
             }
@@ -338,6 +345,57 @@ Mesh::Mesh(const Terrain& t, const int res)
     }
 }
 
+Mesh::Mesh(const Planet& p, const int res)
+{
+
+	Vector center = p.Center();
+	double radius = p.Radius();
+
+	std::array<Vector, 6> directions;
+    directions[0] = Vector(1, 0, 0);
+    directions[1] = Vector(-1, 0, 0);
+    directions[2] = Vector(0, 1, 0);
+    directions[3] = Vector(0, -1, 0);
+    directions[4] = Vector(0, 0, 1);
+    directions[5] = Vector(0, 0, -1);
+	
+    // Vertices 
+    vertices.resize(res * res * 6);
+    normals.resize(res * res * 6);
+    varray.resize((res - 1) * (res - 1) * 6 * 6);
+    narray.resize((res - 1) * (res - 1) * 6 * 6);
+	
+	
+    for (int i = 0; i < 6; i++)
+    {
+		Mesh t(Terrain(directions[i]), res);
+        for (int j = 0; j < t.vertices.size(); j++)
+        {
+            vertices[i * res * res + j] = t.vertices[j] * radius;
+        }
+        for (int j = 0; j < t.varray.size(); j++)
+        {
+            varray[i * (res - 1) * (res - 1) * 6 + j] = t.varray[j] + i * res * res;
+        }
+		for (int j = 0; j < t.narray.size(); j++)
+		{
+			narray[i * (res - 1) * (res - 1) * 6 + j] = t.narray[j];
+		}
+    }
+
+	// Recalculate normals
+	for (int i = 0; i < varray.size(); i += 3)
+	{
+		Vector v1 = vertices[varray[i]];
+		Vector v2 = vertices[varray[i + 1]];
+		Vector v3 = vertices[varray[i + 2]];
+
+		Vector n = (v2 - v1)/Normalized(v3 - v1) * radius;
+		normals[narray[i]] = n;
+		normals[narray[i + 1]] = n;
+		normals[narray[i + 2]] = n;
+	}
+}
 
 /*!
 \brief Creates an axis aligned disc.

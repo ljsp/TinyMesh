@@ -35,7 +35,7 @@ void MainWindow::CreateActions()
 	connect(uiw.sphereMesh, SIGNAL(clicked()), this, SLOT(SphereMeshExample()));
 	connect(uiw.capsuleMesh, SIGNAL(clicked()), this, SLOT(CapsuleMeshExample()));
 	connect(uiw.torusMesh, SIGNAL(clicked()), this, SLOT(TorusMeshExample()));
-	connect(uiw.terrainMesh, SIGNAL(clicked()), this, SLOT(TerrainMeshExample()));
+	connect(uiw.planetMesh, SIGNAL(clicked()), this, SLOT(PlanetMeshExample()));
 	connect(uiw.resetcameraButton, SIGNAL(clicked()), this, SLOT(ResetCamera()));
 	connect(uiw.wireframe, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
 	connect(uiw.radioShadingButton_1, SIGNAL(clicked()), this, SLOT(UpdateMaterial()));
@@ -86,7 +86,7 @@ void MainWindow::SphereImplicitExample()
 
 void MainWindow::DiscMeshExample()
 {
-	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 64);
+	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 16);
 
 	std::vector<Color> cols;
 	cols.resize(discMesh.Vertexes());
@@ -99,7 +99,7 @@ void MainWindow::DiscMeshExample()
 
 void MainWindow::ConeMeshExample()
 {
-	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1.0), 64);
+	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1.0), 16);
 
 	std::vector<Color> cols;
 	cols.resize(coneMesh.Vertexes());
@@ -112,7 +112,7 @@ void MainWindow::ConeMeshExample()
 
 void MainWindow::CylinderMeshExample()
 {
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 64);
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 16);
 	cylinderMesh.Rotate(60.0, 0.0, 100.0);
 	
 	std::vector<Color> cols;
@@ -126,7 +126,7 @@ void MainWindow::CylinderMeshExample()
 
 void MainWindow::SphereMeshExample()
 {
-	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 64);
+	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 16);
 
 	std::vector<Color> cols;
 	cols.resize(sphereMesh.Vertexes());
@@ -139,7 +139,7 @@ void MainWindow::SphereMeshExample()
 
 void MainWindow::CapsuleMeshExample()
 {
-	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 32);
+	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 16);
 
 	std::vector<Color> cols;
 	cols.resize(capsuleMesh.Vertexes());
@@ -152,7 +152,7 @@ void MainWindow::CapsuleMeshExample()
 
 void MainWindow::TorusMeshExample()
 {
-	Mesh torusMesh = Mesh(Torus(Vector(0.0, 0.0, 0.0), 1.0, 0.5), 64);
+	Mesh torusMesh = Mesh(Torus(Vector(0.0, 0.0, 0.0), 1.0, 0.5), 16);
 
 	std::vector<Color> cols;
 	cols.resize(torusMesh.Vertexes());
@@ -163,16 +163,16 @@ void MainWindow::TorusMeshExample()
 	UpdateGeometry();
 }
 
-void MainWindow::TerrainMeshExample()
+void MainWindow::PlanetMeshExample()
 {
-	Mesh terrainMesh = Mesh(Terrain(Vector(1.0, 1.0, 0.0)), 128);
+	Mesh planetMesh = Mesh(Planet(Vector(0.0, 1.0, 0.0),1.0), 12);
 
 	std::vector<Color> cols;
-	cols.resize(terrainMesh.Vertexes());
+	cols.resize(planetMesh.Vertexes());
 	for (int i = 0; i < cols.size(); i++)
 		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
-	meshColor = MeshColor(terrainMesh, cols, terrainMesh.VertexIndexes());
+	meshColor = MeshColor(planetMesh, cols, planetMesh.VertexIndexes());
 	UpdateGeometry();
 }
 

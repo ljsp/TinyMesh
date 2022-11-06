@@ -11,6 +11,7 @@
 #include "disc.h"
 #include <torus.h>
 #include <terrain.h>
+#include <planet.h>
 
 // Triangle
 class Triangle
@@ -139,6 +140,7 @@ public:
 
   // Constructors from core classes
   explicit Mesh(const Terrain&, const int);
+  explicit Mesh(const Planet&, const int);
   explicit Mesh(const Box&);
   explicit Mesh(const Disc&, const int);
   explicit Mesh(const Cone&, const int);

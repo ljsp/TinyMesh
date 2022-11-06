@@ -48,7 +48,7 @@ public:
     QPushButton* sphereMesh;
     QPushButton* capsuleMesh;
     QPushButton* torusMesh;
-    QPushButton* terrainMesh;
+    QPushButton* planetMesh;
     QPushButton *resetcameraButton;
     QPushButton *sphereImplicit;
     QWidget *widget_GL;
@@ -132,10 +132,10 @@ public:
         torusMesh->setObjectName(QString::fromUtf8("torusMesh"));
         torusMesh->setGeometry(QRect(140, 110, 101, 23));
         torusMesh->setCheckable(false);
-        terrainMesh = new QPushButton(Objects_groupBox);
-        terrainMesh->setObjectName(QString::fromUtf8("terrainMesh"));
-        terrainMesh->setGeometry(QRect(20, 200, 202, 46));
-        terrainMesh->setCheckable(false);
+        planetMesh = new QPushButton(Objects_groupBox);
+        planetMesh->setObjectName(QString::fromUtf8("planetMesh"));
+        planetMesh->setGeometry(QRect(140, 140, 101, 23));
+        planetMesh->setCheckable(false);
         resetcameraButton = new QPushButton(Objects_groupBox);
         resetcameraButton->setObjectName(QString::fromUtf8("resetcameraButton"));
         resetcameraButton->setGeometry(QRect(140, 20, 81, 23));
@@ -295,14 +295,14 @@ public:
 #endif // QT_CONFIG(tooltip)
         torusMesh->setText(QCoreApplication::translate("Assets", "Torus Mesh", nullptr));
 #if QT_CONFIG(tooltip)
-        terrainMesh->setToolTip(QCoreApplication::translate("Assets", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        planetMesh->setToolTip(QCoreApplication::translate("Assets", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
             "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
             "p, li { white-space: pre-wrap; }\n"
             "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
             "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#5500ff;\">Callback #01</span></p>\n"
             "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#aa00ff;\">Create Eurographics 1996 Bear</span></p></body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
-        terrainMesh->setText(QCoreApplication::translate("Assets", "Terrain Mesh", nullptr));
+        planetMesh->setText(QCoreApplication::translate("Assets", "Planet Mesh", nullptr));
 #if QT_CONFIG(tooltip)
         resetcameraButton->setToolTip(QCoreApplication::translate("Assets", "<html><head/><body><p><span style=\" color:#5500ff;\">Callback #03</span></p><p><span style=\" font-style:italic; color:#aa00ff;\">Create Eurographics 1996 Bird</span></p></body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)

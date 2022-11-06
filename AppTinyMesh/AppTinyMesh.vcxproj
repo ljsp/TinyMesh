@@ -116,6 +116,7 @@
     <ClCompile Include="Source\meshcolor.cpp" />
     <ClCompile Include="Source\moc_qte.cpp" />
     <ClCompile Include="Source\pilule.cpp" />
+    <ClCompile Include="Source\planet.cpp" />
     <ClCompile Include="Source\realtime-moc.cpp" />
     <ClCompile Include="Source\qtemainwindow.cpp" />
     <ClCompile Include="Source\ray.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\meshcolor.h" />
     <ClInclude Include="Include\pilule.h" />
+    <ClInclude Include="Include\planet.h" />
     <ClInclude Include="Include\ray.h" />
     <ClInclude Include="Include\shader-api.h" />
     <ClInclude Include="Include\sphere.h" />
