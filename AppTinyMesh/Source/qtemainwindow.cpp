@@ -165,7 +165,7 @@ void MainWindow::TorusMeshExample()
 
 void MainWindow::PlanetMeshExample()
 {
-	Mesh planetMesh = Mesh(Planet(Vector(0.0, 1.0, 0.0),1.0), 12);
+	Mesh planetMesh = Mesh(Planet(Vector(0.0, 0.0, 0.0),1.0), 12);
 
 	std::vector<Color> cols;
 	cols.resize(planetMesh.Vertexes());
