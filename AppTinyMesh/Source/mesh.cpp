@@ -696,10 +696,22 @@ void Mesh::Scale(double s)
 
 void Mesh::Merge(const Mesh& mesh)
 {
+    int vertexOffset = this->vertices.size();
+    int normalsOffset = this->normals.size();
+	
 	this->vertices.insert(this->vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
 	this->normals.insert(this->normals.end(), mesh.normals.begin(), mesh.normals.end());
-    this->varray.insert(this->varray.end(), mesh.varray.begin(), mesh.varray.end());
-	this->narray.insert(this->narray.end(), mesh.narray.begin(), mesh.narray.end());
+
+
+	for (int i = 0; i < mesh.varray.size(); i++)
+	{
+		this->varray.push_back(mesh.varray[i] + vertexOffset);
+	}
+	
+    for (int i = 0; i < mesh.narray.size(); i++)
+    {
+		this->narray.push_back(mesh.narray[i] + normalsOffset);
+    }
 }
 
 /*!
