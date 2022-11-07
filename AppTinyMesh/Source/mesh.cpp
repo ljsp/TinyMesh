@@ -350,8 +350,7 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     // Top circle
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
-        va *= radius;
+        Vector va(x * cos(theta * i) * radius + y * sin(theta * i) * radius + a);
         vertices.push_back(va);
     }
 
@@ -387,7 +386,7 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     Vector x, y;
     z.Orthonormal(x, y);
 
-
+	
     // Vertices
     const int vertexCount = (nbDivision * 2) + 2; //Each division neads 2 vertex + 2 for the circles centers
     vertices.reserve(vertexCount); 
@@ -395,40 +394,47 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     // Circle slice size
     const double theta = (2 * 3.141592) / nbDivision;
 
-    // Top circle
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
-        va *= radius;
+        Vector va(x * cos(theta * i) * radius + y * sin(theta * i) * radius + a);
         vertices.push_back(va);
     }
 
-    vertices.push_back(a);
-    normals.push_back(-z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
-
-    // Bottom circle
     int offset = vertices.size();
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector vb(x * cos(theta * i) + y * sin(theta * i) + b);
-        vb *= radius;
+        Vector vb(x * cos(theta * i) * radius + y * sin(theta * i) * radius + b);
         vertices.push_back(vb);
     }
 
+    vertices.push_back(a);
     vertices.push_back(b);
-    normals.push_back(z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i + offset, ((i + 1) % nbDivision) + offset, normals.size() - 1);
 
     //Loop for the sides
-    for (int i = 0; i < nbDivision; i++)
+    for (int i = 0; i < nbDivision * 2; i++)
     {
         Vector normal = Normalized(vertices[i] - z);
         normals.push_back(normal);
-        AddTriangle(i, (i+1) % nbDivision, i+offset, normals.size() - 1);
-        AddTriangle(i + offset, ((i + 1) % nbDivision) + offset, (i + 1) % nbDivision, normals.size() - 1);
+    }
+	
+    normals.push_back(-z);
+    normals.push_back(z);
+
+	for (int i = 0; i < nbDivision; i++)
+	{
+        AddSmoothTriangle(i, i, (i + 1) % nbDivision, (i + 1) % nbDivision, i + offset, i + offset);
+        AddSmoothTriangle(i + offset, i + offset, ((i + 1) % nbDivision) + offset, ((i + 1) % nbDivision) + offset, (i + 1) % nbDivision, (i + 1) % nbDivision);
+	}
+	
+
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 2, i, (i + 1) % nbDivision, normals.size() - 2);
+    }
+
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 1, i + offset, ((i + 1) % nbDivision) + offset, normals.size() - 1);
     }
 }
 
