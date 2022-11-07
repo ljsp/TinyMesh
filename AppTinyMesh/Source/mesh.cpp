@@ -347,7 +347,8 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     // Circle slice size
     const double theta = (2 * 3.141592) / nbDivision;
 
-    // Top circle
+    // Adding Vertex
+
     for (int i = 0; i < nbDivision; i++)
     {
         Vector va(x * cos(theta * i) * radius + y * sin(theta * i) * radius + a);
@@ -355,17 +356,27 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     }
 
     vertices.push_back(a);
-    normals.push_back(-z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
-
-    //Loop for the sides triangle
     vertices.push_back(b);
+
+    // Adding Normals 
     for (int i = 0; i < nbDivision; i++)
     {
         Vector normal = Normalized(vertices[i] - z);
         normals.push_back(normal);
-        AddTriangle(vertices.size() - 1, i , ((i + 1) % nbDivision), normals.size() - 1);
+    }
+
+    normals.push_back(-z);
+
+    // Adding Triangles
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 2, i, (i + 1) % nbDivision, normals.size() - 1);
+    }
+
+    //Loop for the sides triangle
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddSmoothTriangle(vertices.size() - 1, vertices.size() - 2, i , i, ((i + 1) % nbDivision), ((i + 1) % nbDivision));
     }
 
 }

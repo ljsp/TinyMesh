@@ -16,7 +16,9 @@ protected:
 public:
 	//! Empty.
 	Cone() {}
-	explicit Cone(const Vector&, const Vector&, const double r);
+	explicit Cone(const Vector&, const Vector&, const double);
+	explicit Cone(const Vector&, const double&, const double);
+
 
 	//! Empty.
 	~Cone() {}
