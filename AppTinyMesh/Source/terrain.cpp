@@ -9,7 +9,7 @@ Terrain::Terrain(const QImage & img, const Vector & a_, const Vector & b_, float
     elevation.resize(nx*ny);
     for(int x=0; x<nx; x++){
         for(int y=0; y<ny; y++){
-            elevation[Id(x, y)] = qGreen(img.pixel(x, y))/e;
+            elevation[Id(x, ny-y)] = (qGreen(img.pixel(x, y))+qBlue(img.pixel(x, y))+qRed(img.pixel(x, y)))/(3*e);
         }
     }
 
@@ -47,6 +47,11 @@ float Terrain::h(int x, int y) const{
 Vector Terrain::Gradiant(int x, int y) const{
     double gx = h(x+1, y) - h(x-1, y);
     double gy = h(x, y+1) - h(x, y-1);
+    double gz = 0.;
 
-    return Vector(gx, gy, 0.);
+    if(gx == 0 && gy == 0){
+        gz = 1.;
+    }
+
+    return Vector(gx, gy, gz);
 }

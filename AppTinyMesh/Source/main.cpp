@@ -12,7 +12,9 @@ int main(int argc, char *argv[])
 
 
     QImage img;
-    img.load("/Users/stanislasbagnol/Desktop/heightmap.png");
+    //img.load("../AppTinyMesh/data/heightmap.png");
+    img.load("../AppTinyMesh/data/lyon.png");
+
 
     Terrain t(img, Vector(0., 0., 0.), Vector(50., 50., 0.), 50);
 
