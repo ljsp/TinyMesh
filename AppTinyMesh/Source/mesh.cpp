@@ -240,6 +240,23 @@ void Mesh::Scale(const Matrix3& s)
 	}
 }
 
+void Mesh::SphereWarp(const Sphere& s)
+{
+    const Vector center = s.Center();
+	const double radius = s.Radius();
+	
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		Vector v = center - vertices[i];
+        double l = Length(v);
+		if (l < radius )
+		{
+			double distNormalized = l / radius;
+			vertices[i] += v * (1 - distNormalized);
+		}
+	}
+}
+
 /*!
 \brief Creates an axis aligned box.
 
@@ -476,9 +493,9 @@ Mesh::Mesh(const Sphere & S, const int nSubdivision){
     for(int h = 1; h < horizontalStep; h++){
         for(int v = 0; v < verticalStep; v++){
 
-            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
-            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
-            z = cos(PI * (double)h/(double)horizontalStep)*r;
+            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r + c[0];
+            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r + c[1];
+            z = cos(PI * (double)h/(double)horizontalStep)*r + c[2];
 
             vertices.emplace_back(Vector(x, y, z));
             normals.push_back(Normalized(vertices.back()));
