@@ -2,7 +2,8 @@
 
 #include "mathematics.h"
 #include <vector>
-#include <QImage>
+//#include <QImage>
+#include <QtGui/qimage.h>
 
 class Terrain{
 public:
@@ -19,6 +20,12 @@ public:
     int getNy() const;
 
     float h(int x, int y) const;
+
+    double Pente(int x, int y) const;
+
+    void terrassement(int x, int y, int r, float hmax);
+
+    int squareDist(int x1, int y1, int x2, int y2) const;
 
 private:
     Vector a, b;

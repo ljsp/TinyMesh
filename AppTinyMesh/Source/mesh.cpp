@@ -672,16 +672,16 @@ Mesh::Mesh(const Terrain & terrain){
     vertices.resize(terrain.getNx()*terrain.getNy());
     normals.resize(terrain.getNx()*terrain.getNy());
 
-    for(int i=0; i<terrain.getNx(); i++){
-        for(int j=0; j<terrain.getNy(); j++){
+    for(int i=1; i<terrain.getNx() - 1; i++){
+        for(int j=1; j<terrain.getNy() - 1; j++){
             vertices[terrain.Id(i, j)] = terrain.Point(i, j);
             normals[terrain.Id(i, j)] = Normalized(terrain.Gradiant(i, j));
         }
     }
 
 
-    for(int i=0; i<terrain.getNx()-1; i++){
-        for(int j=0; j<terrain.getNy() - 1; j++){
+    for(int i=1; i<terrain.getNx() - 1; i++){
+        for(int j=0; j<terrain.getNy() - 2; j++){
             AddSmoothTriangle(terrain.Id(i, j), terrain.Id(i, j),
                               terrain.Id(i, j+1), terrain.Id(i, j+1),
                               terrain.Id(i+1, j+1), terrain.Id(i+1, j+1));
