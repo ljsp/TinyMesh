@@ -7,8 +7,8 @@
 
 Terrain::Terrain(const QImage & img, const Vector & a_, const Vector & b_, float e): a(a_), b(b_), nx(img.width()), ny(img.height()){
     elevation.resize(nx*ny);
-    for(int x=0; x<nx; x++){
-        for(int y=0; y<ny; y++){
+    for(int x=0; x<nx - 1; x++){
+        for(int y=0; y<ny - 1; y++){
             elevation[Id(x, ny-y)] = (qGreen(img.pixel(x, y))+qBlue(img.pixel(x, y))+qRed(img.pixel(x, y)))/(3*e);
         }
     }
@@ -43,7 +43,6 @@ float Terrain::h(int x, int y) const{
     return elevation[Id(x, y)];
 }
 
-
 Vector Terrain::Gradiant(int x, int y) const{
     double gx = h(x+1, y) - h(x-1, y);
     double gy = h(x, y+1) - h(x, y-1);
@@ -54,4 +53,29 @@ Vector Terrain::Gradiant(int x, int y) const{
     }
 
     return Vector(gx, gy, gz);
+}
+
+double Terrain::Pente(int x, int y) const {
+    Vector G = Gradiant(x, y);
+
+    return std::max(G[0], G[1]);
+}
+
+void Terrain::terrassement(int x, int y, int r, float hmax) {
+    int r2 = r * r;
+
+    for (int i = std::max(0, x - r); i < std::min(nx, x + r); i++) {
+        for (int j = std::max(0, y - r); j < std::min(ny, y + r); j++) {
+            if (squareDist(x, y, i, j) < r2) {
+                if (elevation[Id(i, j)] > hmax) {
+                    elevation[Id(i, j)] = hmax;
+                }
+            }
+        }
+    }
+
+}
+
+int Terrain::squareDist(int x1, int y1, int x2, int y2) const {
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
 }
