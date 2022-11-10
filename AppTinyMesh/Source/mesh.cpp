@@ -287,6 +287,11 @@ Mesh::Mesh(const Box& box)
   AddTriangle(6, 7, 2, 3);
 }
 
+/*!
+\brief Creates a face that is one face of the projection of a cube on a sphere
+\param t the terrain
+\param res the resolution of the shape.
+*/
 Mesh::Mesh(const Terrain& t, const int res)
 {
 	Vector localUp = t.getLocalUp();
@@ -345,6 +350,11 @@ Mesh::Mesh(const Terrain& t, const int res)
     }
 }
 
+/*!
+\brief Creates a sphere that is the projection of a cube on a sphere
+\param p the planet
+\param res the resolution of the shape.
+*/
 Mesh::Mesh(const Planet& p, const int res)
 {
     Vector c = p.Center();
@@ -416,60 +426,6 @@ Mesh::Mesh(const Planet& p, const int res)
         }
     }
 }
-
-/*
-Mesh::Mesh(const Planet& p, const int res)
-{
-
-	Vector center = p.Center();
-	double radius = p.Radius();
-
-	std::array<Vector, 6> directions;
-    directions[0] = Vector(1, 0, 0);
-    directions[1] = Vector(-1, 0, 0);
-    directions[2] = Vector(0, 1, 0);
-    directions[3] = Vector(0, -1, 0);
-    directions[4] = Vector(0, 0, 1);
-    directions[5] = Vector(0, 0, -1);
-	
-    // Vertices 
-    vertices.resize(res * res * 6);
-    normals.resize(res * res * 6);
-    varray.resize((res - 1) * (res - 1) * 6 * 6);
-    narray.resize((res - 1) * (res - 1) * 6 * 6);
-	
-	
-    for (int i = 0; i < 6; i++)
-    {
-		Mesh t(Terrain(directions[i]), res);
-        for (int j = 0; j < t.vertices.size(); j++)
-        {
-            vertices[i * res * res + j] = t.vertices[j] * radius;
-        }
-        for (int j = 0; j < t.varray.size(); j++)
-        {
-            varray[i * (res - 1) * (res - 1) * 6 + j] = t.varray[j] + i * res * res;
-        }
-		for (int j = 0; j < t.narray.size(); j++)
-		{
-			narray[i * (res - 1) * (res - 1) * 6 + j] = t.narray[j];
-		}
-    }
-
-	// Recalculate normals
-	for (int i = 0; i < varray.size(); i += 3)
-	{
-		Vector v1 = vertices[varray[i]];
-		Vector v2 = vertices[varray[i + 1]];
-		Vector v3 = vertices[varray[i + 2]];
-
-		Vector n = (v2 - v1)/Normalized(v3 - v1) * radius;
-		normals[narray[i]] = n;
-		normals[narray[i + 1]] = n;
-		normals[narray[i + 2]] = n;
-	}
-}
-*/
 
 /*!
 \brief Creates an axis aligned disc.
