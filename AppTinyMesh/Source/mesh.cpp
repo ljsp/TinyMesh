@@ -361,8 +361,8 @@ Mesh::Mesh(const Planet& p, const int res)
     // Vertices 
     vertices.resize(res * res * 6);
     normals.resize(res * res * 6);
-    varray.resize(res * res * 6 * 6);
-    narray.resize(res * res * 6 * 6);
+    varray.resize((res - 1) * (res - 1) * 6 * 6);
+    narray.resize((res - 1) * (res - 1) * 6 * 6);
 	
     int triIndex = 0;
 	
@@ -394,21 +394,21 @@ Mesh::Mesh(const Planet& p, const int res)
 
                 if (x < res - 1 && y < res - 1)
                 {
-                    varray[offset + triIndex] = i;
-                    varray[offset + triIndex + 1] = i + res + 1;
-                    varray[offset + triIndex + 2] = i + res;
+                    varray[triIndex] = i;
+                    varray[triIndex + 1] = i + res + 1;
+                    varray[triIndex + 2] = i + res;
 
-                    varray[offset + triIndex + 3] = i;
-                    varray[offset + triIndex + 4] = i + 1;
-                    varray[offset + triIndex + 5] = i + res + 1;
+                    varray[triIndex + 3] = i;
+                    varray[triIndex + 4] = i + 1;
+                    varray[triIndex + 5] = i + res + 1;
 
-                    narray[offset + triIndex] = i;
-                    narray[offset + triIndex + 1] = i + res + 1;
-                    narray[offset + triIndex + 2] = i + res;
+                    narray[triIndex] = i;
+                    narray[triIndex + 1] = i + res + 1;
+                    narray[triIndex + 2] = i + res;
 
-                    narray[offset + triIndex + 3] = i;
-                    narray[offset + triIndex + 4] = i + 1;
-                    narray[offset + triIndex + 5] = i + res + 1;
+                    narray[triIndex + 3] = i;
+                    narray[triIndex + 4] = i + 1;
+                    narray[triIndex + 5] = i + res + 1;
 
                     triIndex += 6;
                 }
