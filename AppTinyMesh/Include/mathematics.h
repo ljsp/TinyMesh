@@ -144,6 +144,9 @@ public:
   static Vector Min(const Vector&, const Vector&);
   static Vector Max(const Vector&, const Vector&);
 
+  // Lenght
+  friend double Length(const Vector&);
+
   // Abs
   friend Vector Abs(const Vector&);
 
@@ -428,6 +431,14 @@ of the two argument vectors.
 inline Vector Vector::Max(const Vector& a, const Vector& b)
 {
   return Vector(a[0] > b[0] ? a[0] : b[0], a[1] > b[1] ? a[1] : b[1], a[2] > b[2] ? a[2] : b[2]);
+}
+
+/*!
+\brief Return the lenght of the given vector.
+*/
+inline double Length(const Vector& a)
+{
+	return sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
 }
 
 /*!

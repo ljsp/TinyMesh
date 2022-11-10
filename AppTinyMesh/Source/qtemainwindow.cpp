@@ -99,7 +99,7 @@ void MainWindow::DiscMeshExample()
 
 void MainWindow::ConeMeshExample()
 {
-	Mesh coneMesh = Mesh(Cone(Vector(1.0, 0.0, 0.0), Vector(-1.0, 1.0, 0.0), 1.0), 16);
+	Mesh coneMesh = Mesh(Cone(Vector(0.0, 0.0, 0.0), -1.0, 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(coneMesh.Vertexes());
@@ -112,8 +112,7 @@ void MainWindow::ConeMeshExample()
 
 void MainWindow::CylinderMeshExample()
 {
-	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), Vector(1.0, 1.0, 0.0), 1), 16);
-	cylinderMesh.Rotate(60.0, 0.0, 100.0);
+	Mesh cylinderMesh = Mesh(Cylinder(Vector(-1.0, 0.0, 0.0), 2.0, 1.0), 64);
 	
 	std::vector<Color> cols;
 	cols.resize(cylinderMesh.Vertexes());

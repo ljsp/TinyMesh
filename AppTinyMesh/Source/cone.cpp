@@ -28,11 +28,14 @@ Cone cone(Vector(0.0,0.0,0.0),Vector(1.0,1.0,1.0), 1);
 \param a,b End circles vertices.
 \param r cone radius.
 */
-Cone::Cone(const Vector& a, const Vector& b, const double r)
+Cone::Cone(const Vector& a, const Vector& b, const double r) : a(a), b(b), r(r)
 {
-    Cone::a = a;
-    Cone::b = b;
-    Cone::r = r;
+	
+}
+
+Cone::Cone(const Vector& a, const double& h, const double r) : a(a), r(r)
+{
+    this->b = a + Vector(h, 0, 0);
 }
 
 /*!

@@ -136,6 +136,9 @@ public:
   void Rotate(const Matrix3&);							 //Rotate according to a rotation matrix
   void Scale(const Matrix3&);							 //Scale according to a scaling matrix
   
+  // Deformations
+  void SphereWarp(const Sphere&);
+
   void TriangleSubdivision(int n);
 
   // Constructors from core classes
