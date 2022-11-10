@@ -87,7 +87,7 @@ void MainWindow::SphereImplicitExample()
 
 void MainWindow::DiscMeshExample()
 {
-	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 16);
+	Mesh discMesh = Mesh(Disc(Vector(0.1, 0.0, 0.0), 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(discMesh.Vertexes());
@@ -126,7 +126,7 @@ void MainWindow::CylinderMeshExample()
 
 void MainWindow::SphereMeshExample()
 {
-	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 16);
+	Mesh sphereMesh = Mesh(Sphere(Vector(0.0, 0.0, 0.0), 1.0), 64);
 
 	std::vector<Color> cols;
 	cols.resize(sphereMesh.Vertexes());
@@ -139,7 +139,7 @@ void MainWindow::SphereMeshExample()
 
 void MainWindow::CapsuleMeshExample()
 {
-	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 16);
+	Mesh capsuleMesh = Mesh(Pilule(Vector(0.0, 0.0, -1.0), 2, 1), 32);
 
 	std::vector<Color> cols;
 	cols.resize(capsuleMesh.Vertexes());
@@ -152,7 +152,7 @@ void MainWindow::CapsuleMeshExample()
 
 void MainWindow::TorusMeshExample()
 {
-	Mesh torusMesh = Mesh(Torus(Vector(0.0, 0.0, 0.0), 1.0, 0.5), 16);
+	Mesh torusMesh = Mesh(Torus(Vector(0.0, 0.0, 0.0), 1.0, 0.5), 64);
 
 	std::vector<Color> cols;
 	cols.resize(torusMesh.Vertexes());
