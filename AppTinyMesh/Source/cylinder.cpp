@@ -28,11 +28,9 @@ Cylinder cyl(Vector(0.0,0.0,0.0),Vector(1.0,1.0,1.0), 1);
 \param a,b End circles vertices.
 \param r cylinder radius.
 */
-Cylinder::Cylinder(const Vector& a, const Vector& b, const double r)
+Cylinder::Cylinder(const Vector& a, const Vector& b, const double r) : a(a), b(b), r(r)
 {
-    Cylinder::a = a;
-    Cylinder::b = b;
-    Cylinder::r = r;
+	
 }
 
 /*!
@@ -50,11 +48,9 @@ Cylinder cyl(Vector(0.0,0.0,0.0),2.0, 1);
 \param h cylinder height.
 \param r cylinder radius.
 */
-Cylinder::Cylinder(const Vector& a, const double h, const double r)
+Cylinder::Cylinder(const Vector& a, const double h, const double r) : a(a), r(r)
 {
-    Cylinder::a = a;
-	Cylinder::b = a + Vector(h, 0.0, 0.0);
-    Cylinder::r = r;
+    this->b = a + Vector(h, 0.0, 0.0);
 }
 
 /*!

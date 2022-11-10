@@ -240,6 +240,23 @@ void Mesh::Scale(const Matrix3& s)
 	}
 }
 
+void Mesh::SphereWarp(const Sphere& s)
+{
+    const Vector center = s.Center();
+	const double radius = s.Radius();
+	
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		Vector v = center - vertices[i];
+        double l = Length(v);
+		if (l < radius )
+		{
+			double distNormalized = l / radius;
+			vertices[i] += v * (1 - distNormalized);
+		}
+	}
+}
+
 /*!
 \brief Creates an axis aligned box.
 
@@ -347,26 +364,36 @@ Mesh::Mesh(const Cone& cone, const int nbDivision)
     // Circle slice size
     const double theta = (2 * 3.141592) / nbDivision;
 
-    // Top circle
+    // Adding Vertex
+
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
-        va *= radius;
+        Vector va(x * cos(theta * i) * radius + y * sin(theta * i) * radius + a);
         vertices.push_back(va);
     }
 
     vertices.push_back(a);
-    normals.push_back(-z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
-
-    //Loop for the sides triangle
     vertices.push_back(b);
+
+    // Adding Normals 
     for (int i = 0; i < nbDivision; i++)
     {
         Vector normal = Normalized(vertices[i] - z);
         normals.push_back(normal);
-        AddTriangle(vertices.size() - 1, i , ((i + 1) % nbDivision), normals.size() - 1);
+    }
+
+    normals.push_back(-z);
+
+    // Adding Triangles
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 2, i, (i + 1) % nbDivision, normals.size() - 1);
+    }
+
+    //Loop for the sides triangle
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddSmoothTriangle(vertices.size() - 1, vertices.size() - 2, i , i, ((i + 1) % nbDivision), ((i + 1) % nbDivision));
     }
 
 }
@@ -387,7 +414,7 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     Vector x, y;
     z.Orthonormal(x, y);
 
-
+	
     // Vertices
     const int vertexCount = (nbDivision * 2) + 2; //Each division neads 2 vertex + 2 for the circles centers
     vertices.reserve(vertexCount); 
@@ -395,40 +422,47 @@ Mesh::Mesh(const Cylinder& cyl, const int nbDivision)
     // Circle slice size
     const double theta = (2 * 3.141592) / nbDivision;
 
-    // Top circle
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector va(x * cos(theta * i) + y * sin(theta * i) + a);
-        va *= radius;
+        Vector va(x * cos(theta * i) * radius + y * sin(theta * i) * radius + a);
         vertices.push_back(va);
     }
 
-    vertices.push_back(a);
-    normals.push_back(-z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i, (i + 1) % nbDivision, normals.size() - 1);
-
-    // Bottom circle
     int offset = vertices.size();
     for (int i = 0; i < nbDivision; i++)
     {
-        Vector vb(x * cos(theta * i) + y * sin(theta * i) + b);
-        vb *= radius;
+        Vector vb(x * cos(theta * i) * radius + y * sin(theta * i) * radius + b);
         vertices.push_back(vb);
     }
 
+    vertices.push_back(a);
     vertices.push_back(b);
-    normals.push_back(z);
-    for (int i = 0; i < nbDivision; i++)
-        AddTriangle(vertices.size() - 1, i + offset, ((i + 1) % nbDivision) + offset, normals.size() - 1);
 
     //Loop for the sides
-    for (int i = 0; i < nbDivision; i++)
+    for (int i = 0; i < nbDivision * 2; i++)
     {
         Vector normal = Normalized(vertices[i] - z);
         normals.push_back(normal);
-        AddTriangle(i, (i+1) % nbDivision, i+offset, normals.size() - 1);
-        AddTriangle(i + offset, ((i + 1) % nbDivision) + offset, (i + 1) % nbDivision, normals.size() - 1);
+    }
+	
+    normals.push_back(-z);
+    normals.push_back(z);
+
+	for (int i = 0; i < nbDivision; i++)
+	{
+        AddSmoothTriangle(i, i, (i + 1) % nbDivision, (i + 1) % nbDivision, i + offset, i + offset);
+        AddSmoothTriangle(i + offset, i + offset, ((i + 1) % nbDivision) + offset, ((i + 1) % nbDivision) + offset, (i + 1) % nbDivision, (i + 1) % nbDivision);
+	}
+	
+
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 2, i, (i + 1) % nbDivision, normals.size() - 2);
+    }
+
+    for (int i = 0; i < nbDivision; i++)
+    {
+        AddTriangle(vertices.size() - 1, i + offset, ((i + 1) % nbDivision) + offset, normals.size() - 1);
     }
 }
 
@@ -459,9 +493,9 @@ Mesh::Mesh(const Sphere & S, const int nSubdivision){
     for(int h = 1; h < horizontalStep; h++){
         for(int v = 0; v < verticalStep; v++){
 
-            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r;
-            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r;
-            z = cos(PI * (double)h/(double)horizontalStep)*r;
+            x = sin(PI * (double)h/(double)horizontalStep) * cos(2*PI * (double)v/(double)verticalStep)*r + c[0];
+            y = sin(PI * (double)h/(double)horizontalStep) * sin(2*PI * (double)v/(double)verticalStep)*r + c[1];
+            z = cos(PI * (double)h/(double)horizontalStep)*r + c[2];
 
             vertices.emplace_back(Vector(x, y, z));
             normals.push_back(Normalized(vertices.back()));
@@ -696,10 +730,22 @@ void Mesh::Scale(double s)
 
 void Mesh::Merge(const Mesh& mesh)
 {
+    int vertexOffset = this->vertices.size();
+    int normalsOffset = this->normals.size();
+	
 	this->vertices.insert(this->vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
 	this->normals.insert(this->normals.end(), mesh.normals.begin(), mesh.normals.end());
-    this->varray.insert(this->varray.end(), mesh.varray.begin(), mesh.varray.end());
-	this->narray.insert(this->narray.end(), mesh.narray.begin(), mesh.narray.end());
+
+
+	for (int i = 0; i < mesh.varray.size(); i++)
+	{
+		this->varray.push_back(mesh.varray[i] + vertexOffset);
+	}
+	
+    for (int i = 0; i < mesh.narray.size(); i++)
+    {
+		this->narray.push_back(mesh.narray[i] + normalsOffset);
+    }
 }
 
 /*!
