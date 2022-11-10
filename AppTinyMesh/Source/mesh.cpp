@@ -347,8 +347,8 @@ Mesh::Mesh(const Terrain& t, const int res)
 
 Mesh::Mesh(const Planet& p, const int res)
 {
-    //Vector center = p.Center();
-    //double radius = p.Radius();
+    Vector c = p.Center();
+    double radius = p.Radius();
 
     std::array<Vector, 6> directions;
     directions[0] = Vector(1, 0, 0);
@@ -389,8 +389,8 @@ Mesh::Mesh(const Planet& p, const int res)
                 const double pz = pointOnUnitCube[2] * sqrt(1 - (x2 + y2) / 2 + (x2 * y2) / 3);
                 const Vector pointOnUnitSphere(px, py, pz);
 				
-                vertices[i] = pointOnUnitSphere;
-                normals[i] = pointOnUnitSphere;
+                vertices[i] = pointOnUnitSphere * radius;
+                normals[i] = pointOnUnitSphere * radius;
 
                 if (x < res - 1 && y < res - 1)
                 {
