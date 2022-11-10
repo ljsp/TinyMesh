@@ -305,6 +305,146 @@ Mesh::Mesh(const Box& box)
 }
 
 /*!
+\brief Creates a face that is one face of the projection of a cube on a sphere
+\param t the terrain
+\param res the resolution of the shape.
+*/
+Mesh::Mesh(const Face& f, const int res)
+{
+	Vector localUp = f.getLocalUp();
+    Vector axisA = f.getAxisA();
+	Vector axisB = f.getAxisB();
+	
+	// Vertices 
+	vertices.resize(res * res);
+    normals.resize(res * res);
+	varray.resize((res - 1) * (res - 1) * 6);
+	narray.resize((res - 1) * (res - 1) * 6);
+	
+    int triIndex = 0;
+	
+    for (int y = 0; y < res; y++)
+    {
+        for (int x = 0; x < res; x++)
+        {
+			const int i = x + y * res;
+			const double u = (double)x / (double)(res - 1);
+			const double v = (double)y / (double)(res - 1);
+			const Vector pointOnUnitCube = localUp + axisA * (u - 0.5f) * 2 + axisB * (v - 0.5f) * 2;
+            const double x2 = pointOnUnitCube[0] * pointOnUnitCube[0];
+            const double y2 = pointOnUnitCube[1] * pointOnUnitCube[1];
+            const double z2 = pointOnUnitCube[2] * pointOnUnitCube[2];
+            const double px = pointOnUnitCube[0] * sqrt(1 - (y2 + z2) / 2 + (y2 * z2) / 3);
+            const double py = pointOnUnitCube[1] * sqrt(1 - (z2 + x2) / 2 + (z2 * x2) / 3);
+            const double pz = pointOnUnitCube[2] * sqrt(1 - (x2 + y2) / 2 + (x2 * y2) / 3);
+            const Vector pointOnUnitSphere(px,py,pz);
+            vertices[i] = pointOnUnitSphere;
+			
+            normals[i] = pointOnUnitSphere;
+			
+
+            if (x < res - 1 && y < res - 1) 
+            {
+				varray[triIndex] = i;
+				varray[triIndex + 1] = i + res + 1;
+				varray[triIndex + 2] = i + res;
+
+				varray[triIndex + 3] = i;
+				varray[triIndex + 4] = i + 1;
+				varray[triIndex + 5] = i + res + 1;
+
+				narray[triIndex] = i;
+				narray[triIndex + 1] = i + res + 1;
+				narray[triIndex + 2] = i + res;
+
+				narray[triIndex + 3] = i;
+				narray[triIndex + 4] = i + 1;
+				narray[triIndex + 5] = i + res + 1;
+
+				triIndex += 6;
+            }
+        }
+    }
+}
+
+/*!
+\brief Creates a sphere that is the projection of a cube on a sphere
+\param p the planet
+\param res the resolution of the shape.
+*/
+Mesh::Mesh(const Planet& p, const int res)
+{
+    Vector c = p.Center();
+    double radius = p.Radius();
+
+    std::array<Vector, 6> directions;
+    directions[0] = Vector(1, 0, 0);
+    directions[1] = Vector(-1, 0, 0);
+    directions[2] = Vector(0, 1, 0);
+    directions[3] = Vector(0, -1, 0);
+    directions[4] = Vector(0, 0, 1);
+    directions[5] = Vector(0, 0, -1);
+
+    // Vertices 
+    vertices.resize(res * res * 6);
+    normals.resize(res * res * 6);
+    varray.resize((res - 1) * (res - 1) * 6 * 6);
+    narray.resize((res - 1) * (res - 1) * 6 * 6);
+	
+    int triIndex = 0;
+	
+    for (int side = 0; side < 6; side++)
+    {
+		Vector localUp = directions[side];
+        Vector axisA = Vector(localUp[1], localUp[2], localUp[0]);
+        Vector axisB = localUp / axisA;
+        int offset = res * res * side;
+		
+        for (int y = 0; y < res; y++)
+        {
+            for (int x = 0; x < res; x++)
+            {
+				const int i = x + y * res + offset;
+                const double u = (double)x / (double)(res - 1);
+                const double v = (double)y / (double)(res - 1);
+                const Vector pointOnUnitCube = localUp + axisA * (u - 0.5f) * 2 + axisB * (v - 0.5f) * 2;
+                const double x2 = pointOnUnitCube[0] * pointOnUnitCube[0];
+                const double y2 = pointOnUnitCube[1] * pointOnUnitCube[1];
+                const double z2 = pointOnUnitCube[2] * pointOnUnitCube[2];
+                const double px = pointOnUnitCube[0] * sqrt(1 - (y2 + z2) / 2 + (y2 * z2) / 3);
+                const double py = pointOnUnitCube[1] * sqrt(1 - (z2 + x2) / 2 + (z2 * x2) / 3);
+                const double pz = pointOnUnitCube[2] * sqrt(1 - (x2 + y2) / 2 + (x2 * y2) / 3);
+                const Vector pointOnUnitSphere(px, py, pz);
+				
+                vertices[i] = pointOnUnitSphere * radius;
+                normals[i] = pointOnUnitSphere * radius;
+
+                if (x < res - 1 && y < res - 1)
+                {
+                    varray[triIndex] = i;
+                    varray[triIndex + 1] = i + res + 1;
+                    varray[triIndex + 2] = i + res;
+
+                    varray[triIndex + 3] = i;
+                    varray[triIndex + 4] = i + 1;
+                    varray[triIndex + 5] = i + res + 1;
+
+                    narray[triIndex] = i;
+                    narray[triIndex + 1] = i + res + 1;
+                    narray[triIndex + 2] = i + res;
+
+                    narray[triIndex + 3] = i;
+                    narray[triIndex + 4] = i + 1;
+                    narray[triIndex + 5] = i + res + 1;
+
+                    triIndex += 6;
+                }
+            }
+        }
+    }
+}
+
+/*!
 \brief Creates an axis aligned disc.
 \param disc the disc.
 \param nbDivision the number of divisions of the shape.

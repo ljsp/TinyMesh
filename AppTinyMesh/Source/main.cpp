@@ -6,13 +6,13 @@ int main(int argc, char *argv[])
     //Mesh m(Sphere(Vector(0., 0., 0.), 5), 20);
 
     //Mesh m(Box(Vector(0., 0., 0.), 4.));
-    //Mesh m(Pilule(Vector(0., 0., 0.), 10, 2), 20);
+	//Mesh m(Pilule(Vector(0., 0., 0.), 10, 2), 20);
     //m.SaveObj(QString("objet.obj"), QString("cube"));
 	//return 0;
 	
 	QApplication app(argc, argv);
 	MainWindow mainWin;
 	mainWin.showMaximized();
-
+	
 	return app.exec();
 }
