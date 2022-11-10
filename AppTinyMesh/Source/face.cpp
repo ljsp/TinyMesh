@@ -1,24 +1,24 @@
 // Self include
-#include "terrain.h"
+#include "face.h"
 
-Terrain::Terrain(const Vector& _localUp)
+Face::Face(const Vector& _localUp)
 {
 	localUp = _localUp;
 	axisA = Vector(localUp[1], localUp[2], localUp[0]);
 	axisB = localUp / axisA;
 }
 
-Vector Terrain::getLocalUp() const
+Vector Face::getLocalUp() const
 {
 	return localUp;
 }
 
-Vector Terrain::getAxisA() const
+Vector Face::getAxisA() const
 {
 	return axisA;
 }
 
-Vector Terrain::getAxisB() const
+Vector Face::getAxisB() const
 {
 	return axisB;
 }

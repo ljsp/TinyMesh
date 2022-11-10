@@ -62,7 +62,7 @@
     <ClCompile Include="Source\torus.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\terrain.cpp">
+    <ClCompile Include="Source\face.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\planet.cpp">
@@ -152,7 +152,7 @@
     <ClInclude Include="Include\torus.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\terrain.h">
+    <ClInclude Include="Include\face.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\planet.h">

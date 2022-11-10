@@ -292,11 +292,11 @@ Mesh::Mesh(const Box& box)
 \param t the terrain
 \param res the resolution of the shape.
 */
-Mesh::Mesh(const Terrain& t, const int res)
+Mesh::Mesh(const Face& f, const int res)
 {
-	Vector localUp = t.getLocalUp();
-    Vector axisA = t.getAxisA();
-	Vector axisB = t.getAxisB();
+	Vector localUp = f.getLocalUp();
+    Vector axisA = f.getAxisA();
+	Vector axisB = f.getAxisB();
 	
 	// Vertices 
 	vertices.resize(res * res);

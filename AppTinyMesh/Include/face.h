@@ -6,14 +6,14 @@
 #include <iostream>
 #include "mathematics.h"
 
-class Terrain
+class Face
 {
 public:
-	Terrain(const Vector&);
+	Face(const Vector&);
 	Vector getLocalUp() const;
 	Vector getAxisA() const;
 	Vector getAxisB() const;
-	~Terrain() {}
+	~Face() {}
 private:
 	Vector localUp;
 	Vector axisA;
