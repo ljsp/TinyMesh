@@ -167,14 +167,37 @@ void MainWindow::TerrainMeshExample()
 {
 	QImage img;
 	img.load("../AppTinyMesh/data/heightmap.png");
-	Terrain t(img, Vector(0., 0., 0.), Vector(50., 50., 0.), 50);
-	Mesh terrainMesh(t);
+
+	Terrain terrain(img, Vector(0., 0., 0.), Vector(50., 50., 0.), 50);
+	// terrassement au millieu du terrain, de rayon 20 et hmax 2.;
+	terrain.terrassement(terrain.getNx() / 2, terrain.getNy() / 2, 100., 2.);
+
+	Mesh terrainMesh(terrain);
 
 	std::vector<Color> cols;
 	cols.resize(terrainMesh.Vertexes());
-	for (int i = 0; i < cols.size(); i++)
-		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
+	for (int x = 1; x < terrain.getNx() - 1; x++) {
+		for (int y = 1; y < terrain.getNy() - 1; y++) {
+			int id = terrain.Id(x, y);
+
+			if (terrain.h(x, y) >= 3.0) {
+				cols[id] = Color(255, 255, 255); // Blanc
+			}
+
+			if (terrain.h(x, y) < 3.0 && terrain.Pente(x, y) < 4) {
+				cols[id] = Color(100, 100, 100); // Gris
+			}
+
+			if (terrain.h(x, y) < 2.0 && terrain.Pente(x, y) < 2) {
+				cols[id] = Color(0, 255, 0); // Vert
+			}
+
+			if (terrain.h(x, y) <= 0.2 && terrain.Pente(x, y) == 0.0) {
+				cols[id] = Color(0, 0, 255); // Bleu 
+			}
+		}
+	}
 	meshColor = MeshColor(terrainMesh, cols, terrainMesh.VertexIndexes());
 	UpdateGeometry();
 }

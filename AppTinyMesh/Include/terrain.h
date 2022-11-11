@@ -24,6 +24,7 @@ public:
     double Pente(int x, int y) const;
 
     void terrassement(int x, int y, int r, float hmax);
+    void terrassement2(int x, int y, int r, float hmax);
 
     int squareDist(int x1, int y1, int x2, int y2) const;
 

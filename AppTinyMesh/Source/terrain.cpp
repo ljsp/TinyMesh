@@ -132,7 +132,7 @@ double Terrain::Pente(int x, int y) const {
 
 /*!
 \brief Set height to hmax of each point in the circle
- of center(x, y) and radius r and height higher than hmax.
+ of center(x, y) and radius r if height higher than hmax.
 
 \param x Coordinate on X axis.
 \param y Coordinate on Y axis.
@@ -150,6 +150,30 @@ void Terrain::terrassement(int x, int y, int r, float hmax) {
                 if (elevation[Id(i, j)] > hmax) {
                     elevation[Id(i, j)] = hmax;
                 }
+            }
+        }
+    }
+
+}
+
+/*!
+\brief Set height to hmax of each point in the circle
+ of center(x, y) and radius r.
+
+\param x Coordinate on X axis.
+\param y Coordinate on Y axis.
+\param r Radius of effect.
+\param hmax Maximum height.
+*/
+void Terrain::terrassement2(int x, int y, int r, float hmax) {
+    int r2 = r * r;
+
+    // Ne parcours pas l'integralité du tableau si on sait
+    // d'avance que le point sera trop éloigné
+    for (int i = std::max(0, x - r); i < std::min(nx, x + r); i++) {
+        for (int j = std::max(0, y - r); j < std::min(ny, y + r); j++) {
+            if (squareDist(x, y, i, j) < r2) {
+                    elevation[Id(i, j)] = hmax;
             }
         }
     }

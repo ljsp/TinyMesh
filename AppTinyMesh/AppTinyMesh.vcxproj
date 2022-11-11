@@ -122,9 +122,8 @@
     <ClCompile Include="Source\ray.cpp" />
     <ClCompile Include="Source\shader-api.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
-    <ClCompile Include="Source\terrain.cpp" />
-    <ClCompile Include="Source\terrain.cpp" />
     <ClCompile Include="Source\face.cpp" />
+    <ClCompile Include="Source\terrain.cpp" />
     <ClCompile Include="Source\torus.cpp" />
     <ClCompile Include="Source\triangle.cpp" />
   </ItemGroup>
@@ -184,8 +183,6 @@
     <ClInclude Include="Include\shader-api.h" />
     <ClInclude Include="Include\sphere.h" />
     <ClInclude Include="Include\face.h" />
-    <ClInclude Include="Include\terrain.h" />
-    <ClInclude Include="Include\terrain.h" />
     <ClInclude Include="Include\torus.h" />
   </ItemGroup>
   <ItemGroup>
