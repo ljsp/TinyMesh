@@ -42,7 +42,7 @@ public:
     static const double epsilon; //!< Internal \htmlonly\epsilon;\endhtmlonly for ray intersection tests.
 };
 
-//! Returns either end vertex of the cylinder.
+//! Returns either end vertex of the pilule.
 inline Vector& Pilule::operator[] (int i)
 {
     if (i == 0) return a;
@@ -57,7 +57,7 @@ inline Vector Pilule::operator[] (int i) const
 }
 
 /*!
-\brief Returns the radius of the cylinder.
+\brief Returns the radius of the pilule.
 */
 inline double Pilule::Radius() const
 {
@@ -65,7 +65,7 @@ inline double Pilule::Radius() const
 }
 
 /*!
-\brief Returns the k-th vertex of the cylinder.
+\brief Returns the k-th vertex of the pilule.
 
 The returned vector is computed by analysing the first three bits of k as follows:
 \code
@@ -78,7 +78,7 @@ inline Vector Pilule::Vertex(int k) const
 }
 
 /*!
-\brief Check if two cylinders are (strictly) equal.
+\brief Check if two pilule are (strictly) equal.
 \param a, b Pilules.
 */
 inline int operator==(const Pilule& a, const Pilule& b)
@@ -87,7 +87,7 @@ inline int operator==(const Pilule& a, const Pilule& b)
 }
 
 /*!
-\brief Check if two cylinders are (strictly) different.
+\brief Check if two pilule are (strictly) different.
 \param a, b Pilules.
 */
 inline int operator!=(const Pilule& a, const Pilule& b)

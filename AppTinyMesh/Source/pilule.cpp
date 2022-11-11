@@ -1,11 +1,19 @@
 #include "pilule.h"
 
 /*!
-\class Pilule cylinder.h
-\brief A cylinder.
+\class Pilule pilule.h
+\brief A pilule.
 
-The class stores the opposite two corners as vectors.
-The vertices of a cylinder can be obtained by the Pilule::Vertex()
+The class stores the opposite two vectors and a radius.
+The vertices of a pilule can be obtained by the Pilule::Vertex(int i)
+ member function that returns vector A if i==1 or B if i==2.
+ The two opposite corners can be obtained faster as follows:
+
+ \code
+Pilule pilule(Vector(0., 0., 0.), 10, 2); // Pilule
+Vector a=pilule[0]; // Lower vertex
+Vector b=pilule[1]; // Upper vertex
+\endcode
 */
 
 const double Pilule::epsilon = 1.0e-5; //!< Epsilon value used to check intersections and some round off errors.
@@ -13,17 +21,14 @@ const double Pilule::epsilon = 1.0e-5; //!< Epsilon value used to check intersec
 
 
 /*!
-\brief Create a cylinder given a vector, the height and a radius.
-
-Note that this constructor does not check the coordinates of the two vectors.
-Therefore, the coordinates of a should be lower than those of b.
+\brief Create a pilule given a vector, the height and a radius.
 
 To create a cylinder of a vector and its height
 the general case, one should use:
 \code
-Pilule cyl(Vector(0.0,0.0,0.0),2.0, 1);
+Pilule pil(Vector(0.0,0.0,0.0),2.0, 1);
 \endcode
-\param a bottom circle vertice.
+\param a bottom vertice.
 \param h cylinder height.
 \param r cylinder radius.
 */
@@ -37,16 +42,16 @@ Pilule::Pilule(const Vector& a, const double h, const double r)
 /*!
 \brief Overloaded.
 \param s Stream.
-\param cyl The cylinder.
+\param pil The pilule.
 */
-std::ostream& operator<<(std::ostream& s, const Pilule& cyl)
+std::ostream& operator<<(std::ostream& s, const Pilule& pil)
 {
-    s << "Pilule(" << cyl.a << ',' << cyl.b << ")";
+    s << "Pilule(" << pil.a << ',' << pil.b << ")";
     return s;
 }
 
 /*!
-\brief Translates a cylinder.
+\brief Translates a pilule.
 
 \param t Translation vector.
 */
@@ -57,7 +62,7 @@ void Pilule::Translate(const Vector& t)
 }
 
 /*!
-\brief Scales a cylinder.
+\brief Scales a pilule.
 
 Note that this function handles negative coefficients in
 the scaling vector (by swapping coordinates if need be).

@@ -28,7 +28,9 @@ public:
     int squareDist(int x1, int y1, int x2, int y2) const;
 
 private:
-    Vector a, b;
-    int nx, ny;
-    std::vector<float> elevation;
+    Vector a; //!< Lower vertex.
+    Vector b; //!< Upper vertex.
+    int nx;   //!< X axis number of subdivision
+    int ny;   //!< Y axis number of subdivision
+    std::vector<float> elevation; //!< Z height value for each point
 };
