@@ -169,10 +169,12 @@ void MainWindow::TerrainMeshExample()
 	img.load("../AppTinyMesh/data/heightmap.png");
 
 	Terrain terrain(img, Vector(0., 0., 0.), Vector(50., 50., 0.), 50);
+	//terrain.terrassement(terrain.getNx() / 2, terrain.getNy() / 2, 100., 2.);
 	// terrassement au millieu du terrain, de rayon 20 et hmax 2.;
-	terrain.terrassement(terrain.getNx() / 2, terrain.getNy() / 2, 100., 2.);
 
-	Mesh terrainMesh(terrain);
+	Face face(img, 50, Vector(0.0,1.0,0.0));
+
+	Mesh terrainMesh(face);
 
 	std::vector<Color> cols;
 	cols.resize(terrainMesh.Vertexes());

@@ -144,6 +144,7 @@ public:
   void TriangleSubdivision(int n);
 
   // Constructors from core classes
+  explicit Mesh(const Face&);
   explicit Mesh(const Face&, const int);
   explicit Mesh(const Planet&, const int);
   explicit Mesh(const Box&);
