@@ -146,6 +146,7 @@ public:
   // Constructors from core classes
   explicit Mesh(const Face&);
   explicit Mesh(const Face&, const int);
+  explicit Mesh(const Planet&);
   explicit Mesh(const Planet&, const int);
   explicit Mesh(const Box&);
   explicit Mesh(const Disc&, const int);

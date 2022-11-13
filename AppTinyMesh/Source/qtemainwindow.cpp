@@ -166,7 +166,7 @@ void MainWindow::TorusMeshExample()
 void MainWindow::TerrainMeshExample()
 {
 	QImage img;
-	img.load("../AppTinyMesh/data/heightmap.png");
+	img.load("../AppTinyMesh/data/island.png");
 
 	Terrain terrain(img, Vector(0., 0., 0.), Vector(50., 50., 0.), 50);
 	//terrain.terrassement(terrain.getNx() / 2, terrain.getNy() / 2, 100., 2.);
@@ -206,13 +206,51 @@ void MainWindow::TerrainMeshExample()
 
 void MainWindow::PlanetMeshExample()
 {
-	Mesh planetMesh = Mesh(Planet(Vector(0.0, 0.0, 0.0),1.0), 16);
+	QImage img, img2, img3, img4, img5, img6;
+	img.load("../AppTinyMesh/data/heightmap5.png");
+	img2.load("../AppTinyMesh/data/heightmap5.png");
+	img3.load("../AppTinyMesh/data/heightmap5.png");
+	img4.load("../AppTinyMesh/data/heightmap5.png");
+	img5.load("../AppTinyMesh/data/heightmap5.png");
+	img6.load("../AppTinyMesh/data/heightmap5.png");
+
+	std::array<QImage, 6> heightmaps;
+	heightmaps[0] = img;
+	heightmaps[1] = img2;
+	heightmaps[2] = img3;
+	heightmaps[3] = img4;
+	heightmaps[4] = img5;
+	heightmaps[5] = img6;
+
+	Planet planet(Vector(0.0, 0.0, 0.0), 5.0, heightmaps, 50);
+	Mesh planetMesh(planet);
 
 	std::vector<Color> cols;
 	cols.resize(planetMesh.Vertexes());
-	for (int i = 0; i < cols.size(); i++)
-		cols[i] = Color(double(i) / 6.0, fmod(double(i) * 39.478378, 1.0), 0.0);
 
+	for(int i = 0; i < 6; i++) {
+		for (int x = 1; x < planet.getNx(); x++) {
+			for (int y = 0; y < planet.getNy(); y++) {
+				int id = planet.Id(i,x, y);
+
+				if (planet.h(i, x, y) >= 3.0) {
+					cols[id] = Color(255, 255, 255); // Blanc
+				}
+
+				if (planet.h(i, x, y) < 3.0 && planet.Pente(i, x, y) < 4) {
+					cols[id] = Color(100, 100, 100); // Gris
+				}
+
+				if (planet.h(i, x, y) < 2.0 && planet.Pente(i, x, y) < 2) {
+					cols[id] = Color(0, 255, 0); // Vert
+				}
+
+				if (planet.h(i, x, y) <= 0.2 && planet.Pente(i, x, y) == 0.0) {
+					cols[id] = Color(0, 0, 255); // Bleu 
+				}
+			}
+		}
+	}
 	meshColor = MeshColor(planetMesh, cols, planetMesh.VertexIndexes());
 	UpdateGeometry();
 }

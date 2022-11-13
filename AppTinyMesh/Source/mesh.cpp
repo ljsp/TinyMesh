@@ -387,28 +387,6 @@ Mesh::Mesh(const Face& face)
     varray.resize((resX - 1) * (resY - 1) * 6);
     narray.resize((resX - 1) * (resY - 1) * 6);
 
-
-    /*for (int i = 1; i < resX - 1; i++) {
-        for (int j = 1; j < resY - 1; j++) {
-            vertices[face.Id(i, j)] = face.Point(i, j);
-            normals[face.Id(i, j)] = Normalized(face.Gradiant(i, j));
-        }
-    }
-
-
-    for (int i = 1; i < face.getNx() - 1; i++) {
-        for (int j = 0; j < face.getNy() - 2; j++) {
-            AddSmoothTriangle(face.Id(i, j), face.Id(i, j),
-                face.Id(i, j + 1), face.Id(i, j + 1),
-                face.Id(i + 1, j + 1), face.Id(i + 1, j + 1));
-
-            AddSmoothTriangle(face.Id(i + 1, j), face.Id(i + 1, j),
-                face.Id(i, j), face.Id(i, j),
-                face.Id(i + 1, j + 1), face.Id(i + 1, j + 1));
-
-        }
-    }*/
-
     int triIndex = 0;
 
     for (int y = 0; y < resY; y++)
@@ -526,6 +504,83 @@ Mesh::Mesh(const Planet& p, const int res)
                     narray[triIndex + 3] = i;
                     narray[triIndex + 4] = i + 1;
                     narray[triIndex + 5] = i + res + 1;
+
+                    triIndex += 6;
+                }
+            }
+        }
+    }
+}
+
+/*!
+\brief Creates a sphere that is the projection of a cube on a sphere
+\param p the planet
+\param res the resolution of the shape.
+*/
+Mesh::Mesh(const Planet& planet)
+{
+    Vector c = planet.Center();
+    std::array<Vector, 6> localsUp = planet.getLocalsUp();
+    std::array<Vector, 6> axisAs = planet.getAxisAs();
+    std::array<Vector, 6> axisBs = planet.getAxisBs();
+    double radius = planet.Radius();
+
+    int resX = planet.getNx();
+    int resY = planet.getNy();
+
+    // Vertices 
+    vertices.resize(resX * resY * 6);
+    normals.resize(resX * resY * 6);
+    varray.resize((resX - 1) * (resY - 1) * 6 * 6);
+    narray.resize((resX - 1) * (resY - 1) * 6 * 6);
+
+    int triIndex = 0;
+
+    for (int side = 0; side < 6; side++)
+    {
+        Vector localUp = localsUp[side];
+        Vector axisA = axisAs[side];
+        Vector axisB = axisBs[side];
+        int offset = resX * resY * side;
+
+        for (int y = 0; y < resY; y++)
+        {
+            for (int x = 0; x < resX; x++)
+            {
+                Vector height = planet.Point(side, x, y);
+                const int i = x + y * resY + offset;
+                const double u = (double)x / (double)(resY - 1);
+                const double v = (double)y / (double)(resY - 1);
+                Vector pointOnUnitCube = localUp + axisA * (u - 0.5f) * 2 + axisB * (v - 0.5f) * 2;
+                const double x2 = pointOnUnitCube[0] * pointOnUnitCube[0];
+                const double y2 = pointOnUnitCube[1] * pointOnUnitCube[1];
+                const double z2 = pointOnUnitCube[2] * pointOnUnitCube[2];
+                const double px = pointOnUnitCube[0] * sqrt(1 - (y2 + z2) / 2 + (y2 * z2) / 3);
+                const double py = pointOnUnitCube[1] * sqrt(1 - (z2 + x2) / 2 + (z2 * x2) / 3);
+                const double pz = pointOnUnitCube[2] * sqrt(1 - (x2 + y2) / 2 + (x2 * y2) / 3);
+                Vector pointOnUnitSphere(px, py, pz);
+                pointOnUnitSphere += height / 40;
+
+                vertices[i] = pointOnUnitSphere * radius;
+                normals[i] = pointOnUnitSphere * radius;
+
+                if (x < resX - 1 && y < resY - 1)
+                {
+                    varray[triIndex] = i;
+                    varray[triIndex + 1] = i + resY + 1;
+                    varray[triIndex + 2] = i + resY;
+
+                    varray[triIndex + 3] = i;
+                    varray[triIndex + 4] = i + 1;
+                    varray[triIndex + 5] = i + resY + 1;
+
+                    narray[triIndex] = i;
+                    narray[triIndex + 1] = i + resY + 1;
+                    narray[triIndex + 2] = i + resY;
+
+                    narray[triIndex + 3] = i;
+                    narray[triIndex + 4] = i + 1;
+                    narray[triIndex + 5] = i + resY + 1;
 
                     triIndex += 6;
                 }
