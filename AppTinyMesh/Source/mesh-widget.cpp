@@ -287,12 +287,12 @@ void MeshWidget::initializeGL()
 
   // Find the prefix path automatically (To adapt to Visual studio file architecture)
   QString pPath = ".";
-  std::ifstream in((pPath + QString("/Shaders/mesh.glsl")).toLocal8Bit().data());
+  std::ifstream in((pPath + QString("/AppTinyMesh/Shaders/mesh.glsl")).toLocal8Bit().data());
   if (in.good() == false)
       pPath = "..";
 
   // Shader/Camera/Profiler
-  QString fullPath = pPath + QString("/Shaders/mesh.glsl");
+  QString fullPath = pPath + QString("/AppTinyMesh/Shaders/mesh.glsl");
   QByteArray ba = fullPath.toLocal8Bit();
   mainShaderProgram = read_program(ba.data());
   camera = Camera(Vector(-10.0), Vector(0.0));
@@ -300,7 +300,7 @@ void MeshWidget::initializeGL()
   profiler.Init();
 
   // Sky
-  fullPath = pPath + QString("/Shaders/skybox.glsl");
+  fullPath = pPath + QString("/AppTinyMesh/Shaders/skybox.glsl");
   ba = fullPath.toLocal8Bit();
   skyboxShader = read_program(ba.data());
   glGenVertexArrays(1, &skyboxVAO);
